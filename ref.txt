@@ -1,0 +1,1224 @@
+dAchi
+dachi.1
+Do Not Disturb
+
+yepitsaziz — 4/22/25, 5:02 PM
+okay ill try to get on a zoom call with him tonight so after we meet up and fill me in with the details and what were missing ill get on a call with him and see if we can help also if you can update the github witht the new project i can show him while your in practice
+i talked to him saturday and he said thier not doing the learning goal thing but i think hes done with his project besides a couple of small things so hoepfully he will be able to help
+dAchi — 4/22/25, 5:52 PM
+https://github.com/cchoiyon/Project3
+GitHub
+GitHub - cchoiyon/Project3
+Contribute to cchoiyon/Project3 development by creating an account on GitHub.
+GitHub - cchoiyon/Project3
+it still has bugs and i need to update alot of shit but it works for the majority
+https://cis-iis2.temple.edu/Spring2025/CIS3342_tuo53004/termproject/Account/Login
+yepitsaziz — 4/22/25, 5:55 PM
+whats a demo login
+dAchi — 4/22/25, 6:05 PM
+Wym
+yepitsaziz — 4/22/25, 6:06 PM
+like i ran the program and its asking for username and password did you make a demo one
+dAchi — 4/22/25, 6:06 PM
+choiyon1 123456
+The restaurant one did work but I forgot to verify the email
+U can also create an account
+To see if the email function works
+yepitsaziz — 4/22/25, 6:08 PM
+oh shit i forgot i didnt update my database so your login or any i create wont work
+dAchi — 4/22/25, 6:09 PM
+just try out the link of the website for now
+To see the functionality
+I’ll send u all the updated sp and tables
+yepitsaziz — 4/22/25, 6:13 PM
+okay yeah the reservation doesnt work
+im gonna create one now
+okay so when i created one the email did work i got a email with the code but when i put the code in the program crashed
+whats the login for the owner of the bonchon account
+dAchi — 4/22/25, 6:24 PM
+I have to edit the email for this so it gets verified
+Yea ima fix the errors tn
+The email class is rlly annoying
+I added the charts that’s part of ur learning opportunity and mine is hard asf
+Most of the requirements are done tho just errors and fix up some of the code like comments and shit
+dAchi — Yesterday at 2:59 AM
+mb forgot about calling, was updating the code, the github is updated and you can run the code on your pc to see eveyrhting works fine locally. i need to find a way to make things work when publishing also theres a folder in shared project called copytodb, thats the sp and tables you need for your database
+added a bunch of restuarnts as well
+dAchi — Yesterday at 3:07 AM
+this is the data which has all the resrutant info so just plug into chat and write a script to put in db for ur side
+Attachment file type: acrobat
+Data.pdf
+58.80 KB
+dAchi — Yesterday at 1:38 PM
+also could u ask ur friend if they used the profs email class or they used their own
+yepitsaziz — Yesterday at 9:09 PM
+the professor
+dAchi — Yesterday at 9:09 PM
+Ok
+yepitsaziz — Yesterday at 9:11 PM
+Image
+do you know what the nuget packages are
+dAchi — Yesterday at 9:21 PM
+Try running it and then it should say which are missing
+After I’m done gym ima try to publish again to see if I can fix all the errors
+By end of tn I should be able to send u the finished project with modified comments and folder structure and i also sent u the project implementation document listing on how we did each task
+yepitsaziz — Yesterday at 9:24 PM
+okay thank you also are these the updated SP and tables? it was from april 4
+dAchi — Yesterday at 9:25 PM
+Not those it’s in the project in the sharedproject3
+yepitsaziz — Yesterday at 9:33 PM
+oh okay do i just run that and itll auto it for me or do i have to create them manullaly
+dAchi — Yesterday at 9:34 PM
+Nah just right click ur db and click new query and paste these in and if errors come up just go to chat and it’ll help solve any sql errors
+yepitsaziz — Yesterday at 10:07 PM
+for this part what name do i put in the bracket
+Image
+and then at the end it has this comment
+Image
+dAchi — Yesterday at 10:20 PM
+i dont think you need the "use " thing but it should work type it into chat to see what to fix
+yepitsaziz — Yesterday at 10:21 PM
+okay yeah i deleted it
+but are there other stored procedures i need to have
+dAchi — Yesterday at 10:23 PM
+that should be all of them
+yepitsaziz — Yesterday at 10:41 PM
+wait i just realized there’s 2 solutions the term project and project3
+dAchi — Yesterday at 11:03 PM
+It’s the termproject solution
+yepitsaziz — Yesterday at 11:04 PM
+okay that makes snese i got the stored procedures and tables now im just adding the data into the tables
+can you send me the data for the photos
+dAchi — Yesterday at 11:09 PM
+i havent added any photos im still trying to fix this publsihing shit
+shits annoying asf
+dAchi — Yesterday at 11:37 PM
+Wait how did ur friends publish their project
+Did they do anything for the api
+dAchi — Yesterday at 11:47 PM
+also what version should we have the project at i did it at 7.0
+yepitsaziz — Yesterday at 11:52 PM
+i have 7.0 as well
+i don’t know i asked him and he didn’t respond
+dAchi — 12:04 AM
+if they can send me the program.cs it would really help with opublsihing cause im confused with the whole pubsling for theAPI
+yepitsaziz — 12:17 AM
+i’ll ask
+wait did you publish on campus?
+why he got do not disturb on😭 he not trynna help
+dAchi — 12:22 AM
+yea the main code works but i cant seem to publish the code for whataver reason
+its actaully dumb
+like it keeps giving me a 500 error
+yepitsaziz — 12:33 AM
+i cant even login or create a account
+dAchi — 12:37 AM
+the published site or just locally ?
+yepitsaziz — 12:37 AM
+how long you staying on campus
+locally
+publish site is down i just checked'
+dAchi — 12:38 AM
+until like 1 ish i thought it would work but its not
+yea its down its not functioning
+yepitsaziz — 12:38 AM
+should i slide i live 25 minutes away
+dAchi — 12:38 AM
+the local one should work i checked on my pc
+sure but im literally just using cursor to figure out the publish thing
+yepitsaziz — 12:56 AM
+what building you in
+dAchi — 1:00 AM
+I’m in The library
+Near the printer
+yepitsaziz — 1:06 AM
+first floor?
+dAchi — 1:06 AM
+Yea
+Behind u
+https://github.com/cchoiyon/test
+GitHub
+GitHub - cchoiyon/test
+Contribute to cchoiyon/test development by creating an account on GitHub.
+GitHub - cchoiyon/test
+yepitsaziz — 1:33 AM
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <location path="." inheritInChildApplications="false">
+        <system.webServer>
+            <handlers>
+                <add name="aspNetCore" path="" verb="" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+            </handlers>
+            <aspNetCore processPath="dotnet" arguments=".\Project3.WebApp.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess" />
+            <modules runAllManagedModulesForAllRequests="true"/>
+            <httpErrors errorMode="DetailedLocalOnly" defaultResponseMode="File">
+                <remove statusCode="404" />
+                <error statusCode="404" path="404.html" responseMode="File" />
+            </httpErrors>
+        </system.webServer>
+    </location>
+    <system.web>
+        <authentication mode="None" />
+        <authorization>
+            <allow users="*" />
+        </authorization>
+    </system.web>
+</configuration>
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp", policy =>
+    {
+        policy.WithOrigins(
+                "https://localhost:7130/", // Local WebApp development with HTTPS
+                "http://localhost:5133/"    // Local WebApp development
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+yepitsaziz — 2:08 AM
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <location path="." inheritInChildApplications="false">
+        <system.webServer>
+            <handlers>
+                <add name="aspNetCore" path="" verb="" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+            </handlers>
+            <aspNetCore processPath="dotnet" arguments=".\Project3.WebApp.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess" />
+            <modules runAllManagedModulesForAllRequests="true"/>
+            <httpErrors errorMode="DetailedLocalOnly" defaultResponseMode="File">
+                <remove statusCode="404" />
+                <error statusCode="404" path="404.html" responseMode="File" />
+            </httpErrors>
+        </system.webServer>
+    </location>
+    <system.web>
+        <authentication mode="None" />
+        <authorization>
+            <allow users="*" />
+        </authorization>
+    </system.web>
+</configuration>
+dAchi — 2:09 AM
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <location path="." inheritInChildApplications="false">
+        <system.webServer>
+            <handlers>
+                <add name="aspNetCore" path="" verb="" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+            </handlers>
+            <aspNetCore processPath="dotnet" arguments=".\Project3.WebApp.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" hostingModel="inprocess">
+                <environmentVariables>
+                    <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+                    <environmentVariable name="DOTNET_SYSTEM_GLOBALIZATION_INVARIANT" value="false" />
+                    <environmentVariable name="DOTNET_CLI_TELEMETRY_OPTOUT" value="1" />
+                    <environmentVariable name="ASPNETCORE_DETAILEDERRORS" value="true" />
+                </environmentVariables>
+            </aspNetCore>
+            <modules runAllManagedModulesForAllRequests="true"/>
+            <defaultDocument>
+                <files>
+                    <add value="index.html" />
+                    <add value="default.html" />
+                    <add value="Default.aspx" />
+                    <add value="Default.htm" />
+                    <add value="index.htm" />
+                    <add value="iisstart.htm" />
+                </files>
+            </defaultDocument>
+            <httpErrors errorMode="Detailed" />
+        </system.webServer>
+    </location>
+    <system.web>
+        <authentication mode="None" />
+        <authorization>
+            <allow users="*" />
+        </authorization>
+        <customErrors mode="Off" />
+        <compilation debug="true" />
+    </system.web>
+</configuration>
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "server=cis-mssql1.temple.edu;Database=sp25_3342_tuo53004;User id=tuo53004;Password=thaekee4Aize;Encrypt=True;TrustServerCertificate=False;"
+  },
+  "SmtpSettings": {
+    "Host": "smtp.temple.edu", 
+    "Port": 587, 
+    "Username": "tuo53004", 
+    "FromAddress": "tuo53004@temple.edu", 
+    "EnableSsl": true 
+  },
+  "ApplicationUrls": {
+    "ApiBaseUrl": "https://localhost:7167/",
+    "WebApp": "https://localhost:7167/"
+  },
+  "Production": {
+    "ApiBaseUrl": "https://cis-iis2.temple.edu/Spring2025/CIS3342_tuo53004/termproject/",
+    "WebApp": "https://cis-iis2.temple.edu/Spring2025/CIS3342_tuo53004/termproject/"
+  },
+  "FileStorage": {
+    "Path": "~/FileStorage/",
+    "WebPath": "/FileStorage/"
+  }
+}
+yepitsaziz — 2:13 AM
+// Need these using statements for stuff below
+using Project3.Shared.Utilities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Project3.Shared.Models.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+Expand
+message.txt
+31 KB
+﻿
+yepitsaziz
+yepitsaziz
+ 
+ 
+// Need these using statements for stuff below
+using Project3.Shared.Utilities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Project3.Shared.Models.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
+using System;
+using Microsoft.Extensions.Configuration;
+using Project3.WebApp.Services;
+using Project3.WebApp.Repositories;
+using System.IO;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
+
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+// Import namespace automatically included by ASP.NET Core when Swashbuckle.AspNetCore is referenced
+
+var builder = WebApplication.CreateBuilder(args);
+
+// --- Services ---
+
+// Load email settings from appsettings.json and register as a singleton
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
+// Register SmtpSettings as a concrete instance (not IOptions)
+builder.Services.AddSingleton(sp => {
+    var settings = new SmtpSettings();
+    builder.Configuration.GetSection("SmtpSettings").Bind(settings);
+    
+    // Get password from User Secrets or Environment Variables (not in appsettings.json)
+    settings.Password = builder.Configuration["SmtpSettings:Password"];
+    
+    return settings;
+});
+
+// Register my custom services
+builder.Services.AddTransient<Project3.Shared.Utilities.Email>();
+builder.Services.AddScoped<Project3.Shared.Utilities.Connection>(); // Changed from DBConnect to Connection
+builder.Services.AddScoped<ReservationRepository>(); // Add repository
+
+// Register Gmail email service (uncomment and add your credentials to use Gmail)
+try {
+    builder.Services.AddSingleton<GmailEmailService>(sp => {
+        var logger = sp.GetRequiredService<ILogger<GmailEmailService>>();
+        return new GmailEmailService(
+            logger,
+            "choiyon321@gmail.com",  // Replace with your Gmail address
+            "gwqp wbhb ogmu ryzu",             // Replace with your Gmail App Password
+            "Yelp 2.0 <choiyon321@gmail.com>" // Updated display name for the From address
+        );
+    });
+} catch (Exception ex) {
+    Console.WriteLine($"Warning: Failed to configure Gmail service: {ex.Message}");
+}
+
+// Register client notification service
+builder.Services.AddSingleton<NotificationService>();
+
+// Register chart service for server-side chart generation
+builder.Services.AddTransient<ChartService>();
+
+// Need this for making HTTP calls (IHttpClientFactory)
+builder.Services.AddHttpClient();
+// Setting up a specific HttpClient for calling my own API?
+builder.Services.AddHttpClient("Project3Api", client =>
+{
+    // Make sure this base address matches where the API is running locally! Ends with '/'
+    client.BaseAddress = new Uri("https://localhost:7167/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    // Add timeout to prevent hanging on API calls
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+
+// Add API base URL to configuration
+builder.Services.AddSingleton(new { ApiBaseUrl = "https://localhost:7167" });
+
+// Adds services for MVC Controllers and Views
+builder.Services.AddControllersWithViews();
+
+// Swagger stuff for API testing page
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Caching and Session state
+builder.Services.AddMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Authentication - using Cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";       // Redirect here if not logged in
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect here if logged in but not allowed
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.SlidingExpiration = true;
+        
+        // Add minimally required event handler to fix AccessDenied redirect for unauthenticated users
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToAccessDenied = context =>
+            {
+                // Check if the user is authenticated
+                if (!context.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    // If not authenticated, redirect to login instead of AccessDenied
+                    context.Response.Redirect("/Account/Login");
+                    return Task.CompletedTask;
+                }
+                
+                // Otherwise proceed with normal AccessDenied handling
+                context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+// Authorization services (needed if using [Authorize])
+builder.Services.AddAuthorization();
+
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSchoolServer", policy =>
+    {
+        // Temple University server domains
+        policy.WithOrigins(
+            "http://cis-mssql1.temple.edu",    // Temple's SQL server
+            "https://cis-mssql1.temple.edu",   // Temple's SQL server (HTTPS)
+            "http://localhost:5000",           // Local development
+            "http://localhost:5001",           // Local development with HTTPS
+            "http://127.0.0.1:5000",           // Local development (alternative)
+            "http://127.0.0.1:5001"            // Local development with HTTPS (alternative)
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
+});
+
+builder.Services.AddLogging();
+
+// ==================================================
+var app = builder.Build();
+// ==================================================
+
+// --- Middleware Pipeline (Order Matters!) ---
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+else
+{
+    // Dev mode: show detailed errors and the Swagger UI
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(); // Makes the /swagger page work
+}
+
+// Ensure SQL directory exists
+try 
+{
+    var sqlDirectory = Path.Combine(app.Environment.ContentRootPath, "SQL");
+    if (!Directory.Exists(sqlDirectory))
+    {
+        try 
+        {
+            Directory.CreateDirectory(sqlDirectory);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            // Log the error but continue - don't crash the application
+            app.Logger.LogWarning($"Could not create SQL directory: {ex.Message}. App will continue without this directory.");
+        }
+    }
+}
+catch (Exception ex)
+{
+    app.Logger.LogWarning($"Error working with SQL directory: {ex.Message}. App will continue.");
+}
+
+// Ensure 2FA columns exist in the TP_Users table
+try
+{
+    using var scope = app.Services.CreateScope();
+    var dbConnection = scope.ServiceProvider.GetRequiredService<Connection>();
+    
+    // First check if the stored procedure exists
+    var checkSpCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spEnsure2FAColumns'");
+    
+    var spExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkSpCmd)) > 0;
+    
+    // Create the stored procedure if it doesn't exist
+    if (!spExists)
+    {
+        var createSpSQL = @"
+CREATE PROCEDURE [dbo].[TP_spEnsure2FAColumns]
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @ColumnExists INT
+    DECLARE @SQL NVARCHAR(MAX)
+    
+    -- Check if TwoFactorToken column exists
+    SELECT @ColumnExists = COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'TP_Users' 
+    AND COLUMN_NAME = 'TwoFactorToken'
+    
+    IF @ColumnExists = 0
+    BEGIN
+        -- Add TwoFactorToken column
+        ALTER TABLE TP_Users
+        ADD TwoFactorToken NVARCHAR(10) NULL
+        
+        PRINT 'Added TwoFactorToken column to TP_Users table'
+    END
+    
+    -- Check if TwoFactorTokenExpiry column exists
+    SELECT @ColumnExists = COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'TP_Users' 
+    AND COLUMN_NAME = 'TwoFactorTokenExpiry'
+    
+    IF @ColumnExists = 0
+    BEGIN
+        -- Add TwoFactorTokenExpiry column
+        ALTER TABLE TP_Users
+        ADD TwoFactorTokenExpiry DATETIME NULL
+        
+        PRINT 'Added TwoFactorTokenExpiry column to TP_Users table'
+    END
+    
+    -- Check if Is2FAVerified column exists
+    SELECT @ColumnExists = COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'TP_Users' 
+    AND COLUMN_NAME = 'Is2FAVerified'
+    
+    IF @ColumnExists = 0
+    BEGIN
+        -- Add Is2FAVerified column
+        ALTER TABLE TP_Users
+        ADD Is2FAVerified BIT NOT NULL DEFAULT 0
+        
+        PRINT 'Added Is2FAVerified column to TP_Users table'
+    END
+    
+    RETURN 0
+END";
+        
+        var createSpCmd = new SqlCommand(createSpSQL);
+        dbConnection.DoUpdateUsingCmdObj(createSpCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spEnsure2FAColumns");
+    }
+    
+    // Execute the stored procedure to ensure columns exist
+    var execSpCmd = new SqlCommand("TP_spEnsure2FAColumns");
+    execSpCmd.CommandType = System.Data.CommandType.StoredProcedure;
+    dbConnection.DoUpdateUsingCmdObj(execSpCmd);
+    app.Logger.LogInformation("Executed TP_spEnsure2FAColumns to verify 2FA columns");
+
+    // Check if TP_spClear2FATokenAndVerify stored procedure exists
+    var checkClear2FACmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spClear2FATokenAndVerify'");
+    
+    var clear2FAExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkClear2FACmd)) > 0;
+    
+    if (!clear2FAExists)
+    {
+        // Create stored procedure for clearing 2FA tokens and setting verified flag
+        var createClear2FASQL = @"
+CREATE PROCEDURE [dbo].[TP_spClear2FATokenAndVerify]
+    @UserID int
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE TP_Users 
+    SET TwoFactorToken = NULL, 
+        TwoFactorTokenExpiry = NULL, 
+        Is2FAVerified = 1 
+    WHERE UserID = @UserID
+    
+    RETURN 0
+END";
+        
+        var createClear2FACmd = new SqlCommand(createClear2FASQL);
+        dbConnection.DoUpdateUsingCmdObj(createClear2FACmd);
+        app.Logger.LogInformation("Created stored procedure TP_spClear2FATokenAndVerify");
+    }
+}
+catch (Exception ex)
+{
+    app.Logger.LogError($"Error setting up 2FA columns: {ex.Message}");
+}
+
+// Create stored procedures if they don't exist
+try
+{
+    // Get a database connection
+    using var scope = app.Services.CreateScope();
+    var dbConnection = scope.ServiceProvider.GetRequiredService<Connection>();
+
+    // 1. Check and create GetAllReservations stored procedure
+    var checkCmd1 = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spGetAllReservations'");
+    
+    var result1 = dbConnection.ExecuteScalarUsingCmdObj(checkCmd1);
+    var procedure1Exists = Convert.ToInt32(result1) > 0;
+
+    if (!procedure1Exists)
+    {
+        // Define the stored procedure creation SQL
+        var createProcedureSQL1 = @"
+CREATE PROCEDURE [dbo].[TP_spGetAllReservations]
+AS
+BEGIN
+    -- SET NOCOUNT ON added to prevent extra result sets from
+    -- interfering with SELECT statements.
+    SET NOCOUNT ON;
+
+    -- Get all reservations
+    SELECT 
+        ReservationID,
+        RestaurantID,
+        UserID,
+        ReservationDateTime,
+        PartySize,
+        ContactName,
+        Phone,
+        Email,
+        SpecialRequests,
+        Status,
+        CreatedDate
+    FROM TP_Reservations
+    ORDER BY ReservationDateTime DESC;
+END";
+
+        var createCmd1 = new SqlCommand(createProcedureSQL1);
+        var createResult1 = dbConnection.DoUpdateUsingCmdObj(createCmd1);
+        
+        app.Logger.LogInformation($"Created stored procedure TP_spGetAllReservations. Result: {createResult1}");
+    }
+    else
+    {
+        app.Logger.LogInformation("Stored procedure TP_spGetAllReservations already exists.");
+    }
+    
+    // 2. Check and create GetRestaurantReservations stored procedure
+    var checkCmd2 = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spGetRestaurantReservations'");
+    
+    var result2 = dbConnection.ExecuteScalarUsingCmdObj(checkCmd2);
+    var procedure2Exists = Convert.ToInt32(result2) > 0;
+
+    if (!procedure2Exists)
+    {
+        // Define the stored procedure creation SQL
+        var createProcedureSQL2 = @"
+CREATE PROCEDURE [dbo].[TP_spGetRestaurantReservations]
+    @RestaurantID nvarchar(450)
+AS
+BEGIN
+    -- SET NOCOUNT ON added to prevent extra result sets from
+    -- interfering with SELECT statements.
+    SET NOCOUNT ON;
+
+    -- Get reservations for the specified restaurant
+    SELECT 
+        ReservationID,
+        RestaurantID,
+        UserID,
+        ReservationDateTime,
+        PartySize,
+        ContactName,
+        Phone,
+        Email,
+        SpecialRequests,
+        Status,
+        CreatedDate
+    FROM TP_Reservations
+    WHERE RestaurantID = @RestaurantID
+    ORDER BY ReservationDateTime DESC;
+END";
+
+        var createCmd2 = new SqlCommand(createProcedureSQL2);
+        var createResult2 = dbConnection.DoUpdateUsingCmdObj(createCmd2);
+        
+        app.Logger.LogInformation($"Created stored procedure TP_spGetRestaurantReservations. Result: {createResult2}");
+    }
+    else
+    {
+        app.Logger.LogInformation("Stored procedure TP_spGetRestaurantReservations already exists.");
+    }
+
+    // Check if TP_spResetUserPassword stored procedure exists
+    var checkResetPasswordCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spResetUserPassword'");
+    
+    var resetPasswordExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkResetPasswordCmd)) > 0;
+    
+    if (!resetPasswordExists)
+    {
+        // Create the reset password stored procedure
+        var createResetPasswordSQL = @"
+CREATE PROCEDURE [dbo].[TP_spResetUserPassword]
+    @UserID int,
+    @PasswordHash nvarchar(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE TP_Users 
+    SET PasswordHash = @PasswordHash,
+        PasswordResetToken = NULL,
+        ResetTokenExpiry = NULL
+    WHERE UserID = @UserID
+    
+    RETURN 0
+END";
+        
+        var createResetPasswordCmd = new SqlCommand(createResetPasswordSQL);
+        dbConnection.DoUpdateUsingCmdObj(createResetPasswordCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spResetUserPassword");
+    }
+    
+    // Check if TP_spValidatePasswordResetToken stored procedure exists
+    var checkValidateTokenCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spValidatePasswordResetToken'");
+    
+    var validateTokenExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkValidateTokenCmd)) > 0;
+    
+    if (!validateTokenExists)
+    {
+        // Create the validate token stored procedure
+        var createValidateTokenSQL = @"
+CREATE PROCEDURE [dbo].[TP_spValidatePasswordResetToken]
+    @UserID int,
+    @Token nvarchar(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT UserID 
+    FROM TP_Users 
+    WHERE UserID = @UserID 
+    AND PasswordResetToken = @Token
+    AND (ResetTokenExpiry IS NULL OR ResetTokenExpiry > GETDATE())
+    
+    RETURN 0
+END";
+        
+        var createValidateTokenCmd = new SqlCommand(createValidateTokenSQL);
+        dbConnection.DoUpdateUsingCmdObj(createValidateTokenCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spValidatePasswordResetToken");
+    }
+    
+    // Check if TP_spGetUsernameByEmail stored procedure exists
+    var checkGetUsernameCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spGetUsernameByEmail'");
+    
+    var getUsernameExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkGetUsernameCmd)) > 0;
+    
+    if (!getUsernameExists)
+    {
+        // Create the get username by email stored procedure
+        var createGetUsernameSQL = @"
+CREATE PROCEDURE [dbo].[TP_spGetUsernameByEmail]
+    @Email nvarchar(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT Username
+    FROM TP_Users 
+    WHERE Email = @Email
+    
+    RETURN 0
+END";
+        
+        var createGetUsernameCmd = new SqlCommand(createGetUsernameSQL);
+        dbConnection.DoUpdateUsingCmdObj(createGetUsernameCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spGetUsernameByEmail");
+    }
+
+    // Check if TP_spGetUserForPasswordReset stored procedure exists
+    var checkGetUserForResetCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spGetUserForPasswordReset'");
+    
+    var getUserForResetExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkGetUserForResetCmd)) > 0;
+    
+    if (!getUserForResetExists)
+    {
+        // Create the get user for password reset stored procedure
+        var createGetUserForResetSQL = @"
+CREATE PROCEDURE [dbo].[TP_spGetUserForPasswordReset]
+    @Email nvarchar(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT UserID, Username, Email 
+    FROM TP_Users 
+    WHERE Email = @Email
+    
+    RETURN 0
+END";
+        
+        var createGetUserForResetCmd = new SqlCommand(createGetUserForResetSQL);
+        dbConnection.DoUpdateUsingCmdObj(createGetUserForResetCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spGetUserForPasswordReset");
+    }
+    
+    // Check if TP_spSetPasswordResetToken stored procedure exists
+    var checkSetResetTokenCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spSetPasswordResetToken'");
+    
+    var setResetTokenExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkSetResetTokenCmd)) > 0;
+    
+    if (!setResetTokenExists)
+    {
+        // Create the set password reset token stored procedure
+        var createSetResetTokenSQL = @"
+CREATE PROCEDURE [dbo].[TP_spSetPasswordResetToken]
+    @UserID int,
+    @ResetToken nvarchar(100),
+    @ExpiryHours int
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE TP_Users 
+    SET PasswordResetToken = @ResetToken,
+        ResetTokenExpiry = DATEADD(HOUR, @ExpiryHours, GETDATE())
+    WHERE UserID = @UserID
+    
+    RETURN 0
+END";
+        
+        var createSetResetTokenCmd = new SqlCommand(createSetResetTokenSQL);
+        dbConnection.DoUpdateUsingCmdObj(createSetResetTokenCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spSetPasswordResetToken");
+    }
+
+    // Check if TP_spGetUserSecurityQuestions stored procedure exists
+    var checkSecurityQuestionsCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spGetUserSecurityQuestions'");
+    
+    var securityQuestionsExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkSecurityQuestionsCmd)) > 0;
+    
+    if (!securityQuestionsExists)
+    {
+        // Create the stored procedure for retrieving security questions
+        var createSecurityQuestionsSQL = @"
+CREATE PROCEDURE [dbo].[TP_spGetUserSecurityQuestions]
+    @Username nvarchar(256)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT 
+        UserID,
+        SecurityQuestion1,
+        SecurityQuestion2,
+        SecurityQuestion3,
+        SecurityAnswer1,
+        SecurityAnswer2,
+        SecurityAnswer3
+    FROM TP_Users 
+    WHERE Username = @Username
+    
+    RETURN 0
+END";
+        
+        var createSecurityQuestionsCmd = new SqlCommand(createSecurityQuestionsSQL);
+        dbConnection.DoUpdateUsingCmdObj(createSecurityQuestionsCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spGetUserSecurityQuestions");
+    }
+
+    // Check if TP_spResetPasswordWithSecurityQuestions stored procedure exists
+    var checkResetPasswordWithSecurityCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spResetPasswordWithSecurityQuestions'");
+    
+    var resetPasswordWithSecurityExists = Convert.ToInt32(dbConnection.ExecuteScalarUsingCmdObj(checkResetPasswordWithSecurityCmd)) > 0;
+    
+    if (!resetPasswordWithSecurityExists)
+    {
+        // Create the stored procedure for resetting password with security questions
+        var createResetPasswordWithSecuritySQL = @"
+CREATE PROCEDURE [dbo].[TP_spResetPasswordWithSecurityQuestions]
+    @Username nvarchar(256),
+    @Answer1 nvarchar(256),
+    @Answer2 nvarchar(256),
+    @Answer3 nvarchar(256),
+    @NewPassword nvarchar(max)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @UserID int
+    DECLARE @StoredAnswer1 nvarchar(256)
+    DECLARE @StoredAnswer2 nvarchar(256)
+    DECLARE @StoredAnswer3 nvarchar(256)
+    
+    -- Get the user's information
+    SELECT 
+        @UserID = UserID,
+        @StoredAnswer1 = SecurityAnswer1,
+        @StoredAnswer2 = SecurityAnswer2,
+        @StoredAnswer3 = SecurityAnswer3
+    FROM TP_Users 
+    WHERE Username = @Username
+    
+    -- Check if user exists
+    IF @UserID IS NULL
+    BEGIN
+        RETURN 1 -- User not found
+    END
+    
+    -- Verify security answers
+    IF @Answer1 = @StoredAnswer1 AND @Answer2 = @StoredAnswer2 AND @Answer3 = @StoredAnswer3
+    BEGIN
+        -- Update the password
+        UPDATE TP_Users
+        SET Password = @NewPassword,
+            ResetPasswordToken = NULL,
+            ResetPasswordExpiry = NULL
+        WHERE UserID = @UserID
+        
+        RETURN 0 -- Success
+    END
+    ELSE
+    BEGIN
+        RETURN 2 -- Security answers don't match
+    END
+END";
+        
+        var createResetPasswordWithSecurityCmd = new SqlCommand(createResetPasswordWithSecuritySQL);
+        dbConnection.DoUpdateUsingCmdObj(createResetPasswordWithSecurityCmd);
+        app.Logger.LogInformation("Created stored procedure TP_spResetPasswordWithSecurityQuestions");
+    }
+}
+catch (Exception ex)
+{
+    app.Logger.LogError($"Error setting up account recovery stored procedures: {ex.Message}");
+}
+
+// Create TP_RestaurantImages table if it doesn't exist
+try 
+{
+    using var scope = app.Services.CreateScope();
+    var dbConnection = scope.ServiceProvider.GetRequiredService<Connection>();
+    
+    // Check if the table exists
+    var checkTableCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM INFORMATION_SCHEMA.TABLES 
+        WHERE TABLE_SCHEMA = 'dbo' 
+        AND TABLE_NAME = 'TP_RestaurantImages'");
+    
+    var tableResult = dbConnection.ExecuteScalarUsingCmdObj(checkTableCmd);
+    var tableExists = Convert.ToInt32(tableResult) > 0;
+    
+    if (!tableExists)
+    {
+        // Create the table
+        var createTableSQL = @"
+        CREATE TABLE [dbo].[TP_RestaurantImages](
+            [ImageID] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+            [RestaurantID] [int] NOT NULL,
+            [ImagePath] [nvarchar](500) NOT NULL,
+            [Caption] [nvarchar](200) NULL,
+            [UploadDate] [datetime] NOT NULL DEFAULT GETDATE(),
+            [DisplayOrder] [int] NOT NULL DEFAULT 0,
+            CONSTRAINT [FK_TP_RestaurantImages_TP_Restaurants] FOREIGN KEY([RestaurantID])
+            REFERENCES [dbo].[TP_Restaurants] ([RestaurantID])
+            ON DELETE CASCADE
+        )";
+        
+        var createTableCmd = new SqlCommand(createTableSQL);
+        var createTableResult = dbConnection.DoUpdateUsingCmdObj(createTableCmd);
+        
+        app.Logger.LogInformation($"Created TP_RestaurantImages table. Result: {createTableResult}");
+    }
+    else
+    {
+        app.Logger.LogInformation("TP_RestaurantImages table already exists.");
+    }
+    
+    // Create the stored procedures for gallery management
+    
+    // 1. Check for TP_spGetRestaurantGalleryImages
+    var checkGalleryGetCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spGetRestaurantGalleryImages'");
+    
+    var galleryGetResult = dbConnection.ExecuteScalarUsingCmdObj(checkGalleryGetCmd);
+    var galleryGetExists = Convert.ToInt32(galleryGetResult) > 0;
+    
+    if (!galleryGetExists)
+    {
+        var createGalleryGetSQL = @"
+        CREATE PROCEDURE [dbo].[TP_spGetRestaurantGalleryImages]
+            @RestaurantID int
+        AS
+        BEGIN
+            SET NOCOUNT ON;
+
+            SELECT 
+                ImageID,
+                RestaurantID,
+                ImagePath,
+                Caption,
+                UploadDate,
+                DisplayOrder
+            FROM TP_RestaurantImages
+            WHERE RestaurantID = @RestaurantID
+            ORDER BY DisplayOrder, UploadDate DESC
+        END";
+        
+        var createGalleryGetCmd = new SqlCommand(createGalleryGetSQL);
+        dbConnection.DoUpdateUsingCmdObj(createGalleryGetCmd);
+        
+        app.Logger.LogInformation("Created TP_spGetRestaurantGalleryImages stored procedure.");
+    }
+    
+    // 2. Check for TP_spAddRestaurantGalleryImage
+    var checkGalleryAddCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spAddRestaurantGalleryImage'");
+    
+    var galleryAddResult = dbConnection.ExecuteScalarUsingCmdObj(checkGalleryAddCmd);
+    var galleryAddExists = Convert.ToInt32(galleryAddResult) > 0;
+    
+    if (!galleryAddExists)
+    {
+        var createGalleryAddSQL = @"
+        CREATE PROCEDURE [dbo].[TP_spAddRestaurantGalleryImage]
+            @RestaurantID int,
+            @ImagePath nvarchar(500),
+            @Caption nvarchar(200)
+        AS
+        BEGIN
+            SET NOCOUNT ON;
+
+            INSERT INTO TP_RestaurantImages (RestaurantID, ImagePath, Caption)
+            VALUES (@RestaurantID, @ImagePath, @Caption)
+            
+            -- Return the new ImageID
+            SELECT SCOPE_IDENTITY() AS ImageID
+        END";
+        
+        var createGalleryAddCmd = new SqlCommand(createGalleryAddSQL);
+        dbConnection.DoUpdateUsingCmdObj(createGalleryAddCmd);
+        
+        app.Logger.LogInformation("Created TP_spAddRestaurantGalleryImage stored procedure.");
+    }
+    
+    // 3. Check for TP_spUpdateGalleryImageCaption
+    var checkGalleryUpdateCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spUpdateGalleryImageCaption'");
+    
+    var galleryUpdateResult = dbConnection.ExecuteScalarUsingCmdObj(checkGalleryUpdateCmd);
+    var galleryUpdateExists = Convert.ToInt32(galleryUpdateResult) > 0;
+    
+    if (!galleryUpdateExists)
+    {
+        var createGalleryUpdateSQL = @"
+        CREATE PROCEDURE [dbo].[TP_spUpdateGalleryImageCaption]
+            @ImageID int,
+            @Caption nvarchar(200)
+        AS
+        BEGIN
+            SET NOCOUNT ON;
+
+            UPDATE TP_RestaurantImages
+            SET Caption = @Caption
+            WHERE ImageID = @ImageID
+        END";
+        
+        var createGalleryUpdateCmd = new SqlCommand(createGalleryUpdateSQL);
+        dbConnection.DoUpdateUsingCmdObj(createGalleryUpdateCmd);
+        
+        app.Logger.LogInformation("Created TP_spUpdateGalleryImageCaption stored procedure.");
+    }
+    
+    // 4. Check for TP_spDeleteGalleryImage
+    var checkGalleryDeleteCmd = new SqlCommand(@"
+        SELECT COUNT(*) 
+        FROM sys.procedures 
+        WHERE name = 'TP_spDeleteGalleryImage'");
+    
+    var galleryDeleteResult = dbConnection.ExecuteScalarUsingCmdObj(checkGalleryDeleteCmd);
+    var galleryDeleteExists = Convert.ToInt32(galleryDeleteResult) > 0;
+    
+    if (!galleryDeleteExists)
+    {
+        var createGalleryDeleteSQL = @"
+        CREATE PROCEDURE [dbo].[TP_spDeleteGalleryImage]
+            @ImageID int
+        AS
+        BEGIN
+            SET NOCOUNT ON;
+
+            -- Get the image path for deletion before removing the record
+            SELECT ImagePath FROM TP_RestaurantImages WHERE ImageID = @ImageID
+            
+            -- Delete the record
+            DELETE FROM TP_RestaurantImages
+            WHERE ImageID = @ImageID
+        END";
+        
+        var createGalleryDeleteCmd = new SqlCommand(createGalleryDeleteSQL);
+        dbConnection.DoUpdateUsingCmdObj(createGalleryDeleteCmd);
+        
+        app.Logger.LogInformation("Created TP_spDeleteGalleryImage stored procedure.");
+    }
+}
+catch (Exception ex)
+{
+    app.Logger.LogError($"Error setting up restaurant images table/procedures: {ex.Message}");
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles(); // For wwwroot files (CSS, JS)
+app.UseRouting(); // Decides which endpoint to use
+
+// Use CORS middleware
+app.UseCors("AllowSchoolServer");
+
+// Session needs to be configured before Auth and endpoint mapping
+app.UseSession();
+
+// Authentication & Authorization
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Add minimal middleware to fix AccessDenied redirects for unauthenticated users
+app.Use(async (context, next) =>
+{
+    // Special case for AccessDenied - if user is not authenticated, redirect to login
+    if (context.Request.Path.StartsWithSegments("/Account/AccessDenied") && 
+        !context.User.Identity.IsAuthenticated)
+    {
+        app.Logger.LogInformation("Unauthenticated user tried to access AccessDenied, redirecting to login");
+        context.Response.Redirect("/Account/Login");
+        return;
+    }
+    
+    // Handle redirects for specific controllers that require authentication
+    if ((context.Request.Path.StartsWithSegments("/ReviewerHome") || 
+         context.Request.Path.Value == "/") && 
+        !context.User.Identity.IsAuthenticated)
+    {
+        app.Logger.LogInformation("Unauthenticated user tried to access {Path}, redirecting to login", context.Request.Path);
+        context.Response.Redirect("/Account/Login");
+        return;
+    }
+    
+    await next();
+});
+
+// --- Map Endpoints ---
+
+// Maps API controllers (using routes defined in the controller files)
+app.MapControllers();
+
+// Maps the default route for MVC pages (controller/action/optional-id)
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Global exception handler
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next.Invoke();
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "Unhandled exception in middleware pipeline");
+        
+        // Only redirect to error page for non-API requests that accept HTML
+        if (!context.Request.Path.StartsWithSegments("/api") && 
+            context.Request.Headers["Accept"].ToString().Contains("text/html"))
+        {
+            context.Response.Redirect("/Home/Error");
+        }
+        else
+        {
+            context.Response.StatusCode = 500;
+        }
+    }
+});
+
+// ==================================================
+app.Run(); // Start the app!
+// ==================================================

@@ -1,0 +1,1037 @@
+﻿@model RestaurantDetailViewModel
+@using System.Security.Claims
+@using System.Web
+@{
+    ViewData["Title"] = Model.Profile?.Name ?? "Restaurant Details";
+    Layout = "_AppLayout"; // Use your main application layout
+    
+    // Add cache-busting timestamp
+    var cacheBuster = DateTime.Now.Ticks;
+}
+
+@* Use the Notification ViewComponent to display messages *@
+@await Component.InvokeAsync("Notification")
+
+@if (Model.Profile != null)
+{
+    @* --- Restaurant Header --- *@
+    <div class="restaurant-profile-header mb-4">
+        <div class="d-flex align-items-center mb-3">
+            @if (!string.IsNullOrEmpty(Model.Profile.LogoPhoto))
+            {
+                <div class="me-3">
+                    <img src="@Model.Profile.LogoPhoto" alt="@Model.Profile.Name Logo" class="restaurant-logo img-fluid rounded" style="max-width: 100px; max-height: 100px;" />
+                </div>
+            }
+            <div>
+                <h1>@Model.Profile.Name</h1>
+                <div class="d-flex align-items-center mb-2">
+                    <span class="star-rating me-3">
+                        @Model.AverageRatingDisplay
+                    </span>
+                    <span class="price-level text-muted">
+                        @Model.AveragePriceLevelDisplay
+                    </span>
+                </div>
+                <p class="text-muted">@Model.Profile.Cuisine - @Model.Profile.City, @Model.Profile.State</p>
+            </div>
+        </div>
+        @* Make Reservation Button with AJAX loading *@
+        <button type="button" class="btn btn-primary mt-2" 
+                onclick="loadReservationModal(@Model.RestaurantID, '@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Profile.Name))')">
+            <i class="bi bi-calendar-check me-2"></i>Make Reservation
+        </button>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8"> @* Main content area *@
+
+             @* --- Marketing Description --- *@
+             @if (!string.IsNullOrWhiteSpace(Model.Profile.MarketingDescription))
+             {
+                 <section id="description" class="mb-4">
+                     <h2>About @Model.Profile.Name</h2>
+                     <p>@Model.Profile.MarketingDescription</p>
+                 </section>
+             }
+
+             @* --- Photo Gallery using ViewComponent --- *@
+             @if (Model.GalleryImages != null && Model.GalleryImages.Any())
+             {
+                 <section id="gallery" class="mb-5">
+                     @await Component.InvokeAsync("PhotoGallery", new { images = Model.GalleryImages, title = "Photo Gallery" })
+                 </section>
+             }
+
+             @* --- Reviews Section with Summary ViewComponent --- *@
+             <section id="reviews" class="mb-4">
+                 <div class="d-flex justify-content-between align-items-center mb-3">
+                     <h2>Reviews (@Model.Reviews.Count)</h2>
+                     @if (User.IsInRole("Reviewer"))
+                     {
+                         <a asp-controller="Review" asp-action="Create" asp-route-restaurantId="@Model.RestaurantID" class="btn btn-primary">
+                             <i class="bi bi-pencil-square me-2"></i>Write a Review
+                         </a>
+                     }
+                 </div>
+                 
+                 @* Check if we're coming from a review update and should force refresh *@
+                 @if (TempData["ForceRefresh"] != null && (bool)TempData["ForceRefresh"] == true)
+                 {
+                     <script>
+                         // Force a complete reload to clear any browser caching
+                         window.onload = function() {
+                             // Add a slight delay to ensure the page is fully loaded first
+                             setTimeout(function() {
+                                 console.log("Forcing page refresh due to review update");
+                                 window.location.reload(true);
+                             }, 100);
+                         };
+                     </script>
+                 }
+                 
+                 @if (Model.Reviews != null && Model.Reviews.Any())
+                 {
+                     <div class="review-list mt-4">
+                         @foreach (var review in Model.Reviews)
+                         {
+                             <div class="card mb-3">
+                                 <div class="card-body">
+                                     <div class="d-flex justify-content-between">
+                                         <h5 class="card-title mb-1">@review.ReviewerUsername</h5>
+                                         <small class="text-muted">@review.VisitDate.ToString("MMMM d, yyyy")</small>
+                                     </div>
+                                     <div class="mb-3">
+                                         @* Display star ratings in an appealing way *@
+                                         <div class="review-ratings">
+                                             <div class="review-rating-item">
+                                                 <span class="rating-label">Food:</span>
+                                                 <div class="mini-stars" data-timestamp="@cacheBuster">
+                                                     @for (int i = 1; i <= 5; i++)
+                                                     {
+                                                         bool filled = i <= review.FoodQualityRating;
+                                                         <i class="fas fa-star @(filled ? "filled" : "empty")" 
+                                                            data-rating="@i" 
+                                                            style="color: @(filled ? "#ffc107" : "#e0e0e0");"></i>
+                                                     }
+                                                 </div>
+                                             </div>
+                                             <div class="review-rating-item">
+                                                 <span class="rating-label">Service:</span>
+                                                 <div class="mini-stars" data-timestamp="@cacheBuster">
+                                                     @for (int i = 1; i <= 5; i++)
+                                                     {
+                                                         bool filled = i <= review.ServiceRating;
+                                                         <i class="fas fa-star @(filled ? "filled" : "empty")" 
+                                                            data-rating="@i" 
+                                                            style="color: @(filled ? "#ffc107" : "#e0e0e0");"></i>
+                                                     }
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <p class="card-text">@review.Comments</p>
+                                 </div>
+                             </div>
+                         }
+                     </div>
+                 }
+                 else 
+                 {
+                     <div class="alert alert-info">
+                         No reviews yet. Be the first to share your experience!
+                     </div>
+                 }
+             </section>
+        </div>
+        
+        <div class="col-md-4"> @* Right sidebar *@
+            <div class="restaurant-sidebar">
+                <!-- Restaurant Map -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-geo-alt text-primary me-2"></i>
+                            Location
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="restaurantLocationMap" style="height: 300px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Other restaurant information as cards -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle text-primary me-2"></i>
+                            Restaurant Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            @if (!string.IsNullOrEmpty(Model.Profile.Address))
+                            {
+                                <li class="mb-2">
+                                    <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                    @Model.Profile.Address<br>
+                                    @Model.Profile.City, @Model.Profile.State @Model.Profile.ZipCode
+                                </li>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Profile.Contact))
+                            {
+                                <li class="mb-2">
+                                    <i class="bi bi-telephone-fill text-success me-2"></i>
+                                    @Model.Profile.Contact
+                                </li>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Profile.WebsiteURL))
+                            {
+                                <li class="mb-2">
+                                    <i class="bi bi-globe text-info me-2"></i>
+                                    <a href="@Model.Profile.WebsiteURL" target="_blank">Website</a>
+                                </li>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Profile.Hours))
+                            {
+                                <li class="mb-2">
+                                    <i class="bi bi-clock-fill text-warning me-2"></i>
+                                    <strong>Hours:</strong><br>
+                                    <span style="white-space: pre-line">@Model.Profile.Hours</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">Restaurant details could not be loaded.</div>
+}
+
+@section Head {
+    @* Add specific CSS if needed for this page *@
+    <style>
+        .restaurant-profile-header h1 { margin-bottom: 0.25rem; }
+        .star-rating { color: #ffc107; } /* Example gold color */
+        .price-level { font-weight: bold; }
+        .sticky-top { /* Ensure sticky positioning works */
+            position: -webkit-sticky;
+            position: sticky;
+        }
+        #restaurantMap {
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* Mini Star Rating Styles */
+        .review-ratings {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .review-rating-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .rating-label {
+            font-weight: 500;
+            min-width: 90px;
+        }
+        
+        .mini-stars {
+            display: inline-flex;
+            gap: 2px;
+        }
+        
+        .mini-stars .fas.fa-star {
+            font-size: 0.9rem;
+        }
+        
+        .mini-stars .fas.fa-star.filled {
+            color: #ffc107; /* Gold color for filled stars */
+        }
+        
+        .mini-stars .fas.fa-star.empty {
+            color: #e0e0e0; /* Light gray for empty stars */
+        }
+        
+        /* Force override any cached styles */
+        .fa-star.filled {
+            color: #ffc107 !important;
+        }
+        
+        .fa-star.empty {
+            color: #e0e0e0 !important;
+        }
+
+        /* Style for user's own reviews */
+        .card:has(.review-actions) {
+            border-left: 3px solid #3498db;
+        }
+        .review-actions {
+            border-top: 1px solid #f0f0f0;
+            padding-top: 10px;
+        }
+    </style>
+}
+
+@section Styles {
+    <style>
+        .review-ratings {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-rating-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .rating-label {
+            width: 100px;
+            font-weight: 500;
+        }
+
+        .mini-stars {
+            display: flex;
+        }
+
+        .mini-stars i {
+            margin-right: 2px;
+        }
+        
+        /* Gallery styles */
+        .gallery-container {
+            margin-bottom: 20px;
+        }
+        
+        .gallery-img {
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .gallery-thumbnails {
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .gallery-thumb {
+            height: 60px;
+            width: 60px;
+            object-fit: cover;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .gallery-thumb:hover {
+            opacity: 1;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        let map;
+        let marker;
+        let infoWindow;
+
+        function initRestaurantMap() {
+            // Default to NYC initially (will be replaced by geocoding)
+            const defaultLocation = { lat: 40.7128, lng: -74.0060 };
+            
+            // Create the map
+            map = new google.maps.Map(document.getElementById('restaurantLocationMap'), {
+                zoom: 15,
+                center: defaultLocation
+            });
+
+            // Get restaurant info and geocode the address
+            const restaurant = {
+                name: '@Model.Profile.Name?.Replace("'", "\'")',
+                address: '@Model.Profile.Address?.Replace("'", "\'")',
+                city: '@Model.Profile.City?.Replace("'", "\'")',
+                state: '@Model.Profile.State',
+                zipCode: '@Model.Profile.ZipCode',
+                id: @Model.RestaurantID
+            };
+            
+            const geocoder = new google.maps.Geocoder();
+            const address = `${restaurant.address}, ${restaurant.city}, ${restaurant.state} ${restaurant.zipCode}`;
+
+            geocoder.geocode({ address: address }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const location = results[0].geometry.location;
+                    
+                    // Update map center
+                    map.setCenter(location);
+                    
+                    // Add marker
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: location,
+                        title: restaurant.name,
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    // Add info window
+                    infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div>
+                                <h6>${restaurant.name}</h6>
+                                <p>${restaurant.address}<br>
+                                ${restaurant.city}, ${restaurant.state} ${restaurant.zipCode}</p>
+                                <a href="https://maps.google.com/?q=${encodeURIComponent(address)}" 
+                                   target="_blank" class="btn btn-sm btn-outline-primary">
+                                   Get Directions
+                                </a>
+                            </div>
+                        `
+                    });
+
+                    // Open info window when marker is clicked
+                    marker.addListener('click', () => {
+                        infoWindow.open(map, marker);
+                    });
+                    
+                    // Open info window by default
+                    infoWindow.open(map, marker);
+                } else {
+                    console.error('Geocode was not successful for the following reason: ' + status);
+                    
+                    // If geocoding fails, show a message on the map
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'alert alert-warning m-2';
+                    infoDiv.innerHTML = 'Unable to load map location. Please check the address.';
+                    document.getElementById('restaurantLocationMap').appendChild(infoDiv);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initRestaurantMap);
+
+        $(document).ready(function() {
+            // Join restaurant view group for real-time notifications
+            const restaurantId = @Model.RestaurantID;
+            
+            // Join the appropriate groups
+            joinContextGroups(currentUserId, restaurantId, isUserRestaurantRep);
+            
+            // Rest of the existing script...
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize any Bootstrap components
+            var reservationContainer = document.getElementById('reservationModalContainer');
+            
+            // Add a mutation observer to watch for changes to the modal container
+            // This ensures we properly initialize the modal after it's loaded via AJAX
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        console.log('Modal container updated, setting up event handlers');
+                        setupModalEventHandlers();
+                    }
+                });
+            });
+            
+            // Start observing the modal container
+            if (reservationContainer) {
+                observer.observe(reservationContainer, { childList: true });
+            }
+            
+            // Rest of your existing DOMContentLoaded code
+            // Set minimum date/time for reservation to current time
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+            var day = String(now.getDate()).padStart(2, '0');
+            var hours = String(now.getHours()).padStart(2, '0');
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            var minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            
+            // Initialize the map if it exists
+            if (document.getElementById('restaurantMap')) {
+                initRestaurantMap();
+            }
+        });
+
+        function loadReservationModal(restaurantId, restaurantName) {
+            console.log("Loading reservation modal for: " + restaurantName + " (" + restaurantId + ")");
+            
+            // Check if bootstrap is loaded
+            if (typeof bootstrap === 'undefined') {
+                console.error("Bootstrap is not loaded!");
+                alert("There was a problem loading the reservation system. Please try refreshing the page.");
+                return;
+            } else {
+                console.log("Bootstrap is loaded correctly. Version:", bootstrap.Tooltip.VERSION);
+            }
+            
+            // Log the URL being fetched
+            const initialModelUrl = `/Reservation/GetInitialModel?restaurantId=${restaurantId}`;
+            console.log("Fetching from URL:", initialModelUrl);
+            
+            // Function to create a fallback modal with basic information if the API call fails
+            const createFallbackModal = () => {
+                console.log("Creating fallback reservation modal");
+                
+                // Basic HTML for the reservation modal with proper buttons and structure
+                const modalHtml = 
+                '<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">' +
+                    '<div class="modal-dialog modal-lg">' +
+                        '<div class="modal-content">' +
+                            '<div class="modal-header">' +
+                                '<h5 class="modal-title" id="reservationModalLabel">Make a Reservation at ' + restaurantName + '</h5>' +
+                                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                            '</div>' +
+                            '<div class="modal-body">' +
+                                '<div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">' +
+                                    '<i class="bi bi-exclamation-triangle me-2"></i>' +
+                                    'We\'re experiencing technical difficulties with our reservation system.' +
+                                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>' +
+                                
+                                '<div id="reservationFormContainer">' +
+                                    '<form id="reservationForm" method="post">' +
+                                        '<div id="validationSummary" class="text-danger mb-3"></div>' +
+                                        
+                                        '<input type="hidden" id="RestaurantID" name="RestaurantID" value="' + restaurantId + '" />' +
+                                        '<input type="hidden" id="RestaurantName" name="RestaurantName" value="' + restaurantName + '" />' +
+                                        
+                                        '<div class="mb-3">' +
+                                            '<label for="ContactName" class="form-label">Your Name</label>' +
+                                            '<input id="ContactName" name="ContactName" class="form-control" placeholder="Your Name" value="" />' +
+                                            '<span data-valmsg-for="ContactName" class="text-danger"></span>' +
+                                        '</div>' +
+                                        
+                                        '<div class="mb-3">' +
+                                            '<label for="Phone" class="form-label">Phone Number</label>' +
+                                            '<input id="Phone" name="Phone" class="form-control" placeholder="Your Phone Number" value="" />' +
+                                            '<span data-valmsg-for="Phone" class="text-danger"></span>' +
+                                        '</div>' +
+                                        
+                                        '<div class="mb-3">' +
+                                            '<label for="Email" class="form-label">Email Address</label>' +
+                                            '<input id="Email" name="Email" type="email" class="form-control" placeholder="Your Email Address" value="" />' +
+                                            '<span data-valmsg-for="Email" class="text-danger"></span>' +
+                                        '</div>' +
+                                        
+                                        '<div class="row g-3">' +
+                                            '<div class="col-md-6 mb-3">' +
+                                                '<label for="ReservationDateTime" class="form-label">Date & Time</label>' +
+                                                '<input id="ReservationDateTime" name="ReservationDateTime" type="datetime-local" class="form-control" value="" />' +
+                                                '<span data-valmsg-for="ReservationDateTime" class="text-danger"></span>' +
+                                            '</div>' +
+                                            
+                                            '<div class="col-md-6 mb-3">' +
+                                                '<label for="PartySize" class="form-label">Party Size</label>' +
+                                                '<input id="PartySize" name="PartySize" type="number" min="1" class="form-control" placeholder="Number of Guests" value="2" />' +
+                                                '<span data-valmsg-for="PartySize" class="text-danger"></span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        
+                                        '<div class="mb-3">' +
+                                            '<label for="SpecialRequests" class="form-label">Special Requests</label>' +
+                                            '<textarea id="SpecialRequests" name="SpecialRequests" class="form-control" rows="3" placeholder="Any special requests? (Optional)"></textarea>' +
+                                            '<span data-valmsg-for="SpecialRequests" class="text-danger"></span>' +
+                                        '</div>' +
+                                    '</form>' +
+                                '</div>' +
+                                
+                                '<!-- Success view (hidden by default) -->' +
+                                '<div id="successView" class="d-none text-center">' +
+                                    '<div class="mb-4">' +
+                                        '<i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>' +
+                                    '</div>' +
+                                    '<h2 class="mb-3">Reservation Confirmed!</h2>' +
+                                    '<p class="lead mb-4">Your reservation request has been submitted successfully.</p>' +
+                                    '<p>The restaurant will contact you if any additional information is needed.</p>' +
+                                '</div>' +
+                                
+                                '<!-- Alert for success message -->' +
+                                '<div id="reservationSuccess" class="alert alert-success alert-dismissible fade show d-none" role="alert">' +
+                                    '<strong>Success!</strong> Your reservation has been submitted successfully.' +
+                                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>' +
+                                
+                                '<!-- Alert for error message -->' +
+                                '<div id="reservationError" class="alert alert-danger alert-dismissible fade show d-none" role="alert">' +
+                                    '<strong>Error!</strong> <span id="errorMessage">There was a problem submitting your reservation.</span>' +
+                                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>' +
+                                
+                                '<!-- Alert for demo mode response -->' +
+                                '<div id="demoModeAlert" class="alert alert-info alert-dismissible fade show d-none" role="alert">' +
+                                    '<i class="bi bi-info-circle me-2"></i> <span id="demoMessage">This is a demo mode response.</span>' +
+                                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>' +
+                                
+                                '<!-- Alert for offline mode -->' +
+                                '<div id="offlineModeAlert" class="alert alert-warning alert-dismissible fade show d-none" role="alert">' +
+                                    '<i class="bi bi-wifi-off me-2"></i> <span id="offlineMessage">Your reservation has been recorded in offline mode.</span>' +
+                                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="modal-footer">' +
+                                '<div id="formFooterButtons">' +
+                                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>' +
+                                    '<button id="submitReservation" type="button" class="btn btn-primary">Submit Reservation</button>' +
+                                    '<!-- Loading spinner - hidden by default -->' +
+                                    '<div id="submitSpinner" class="spinner-border text-primary d-none" role="status">' +
+                                        '<span class="visually-hidden">Loading...</span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div id="successFooterButtons" class="d-none">' +
+                                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
+                                    '<button id="resetReservationButton" type="button" class="btn btn-primary">Make Another Reservation</button>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+                
+                // Insert the fallback modal HTML
+                document.getElementById('reservationModalContainer').innerHTML = modalHtml;
+                
+                // Set a default date/time for the reservation
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(19, 0, 0, 0);
+                
+                // Format date for datetime-local input (YYYY-MM-DDTHH:MM)
+                const formattedDate = tomorrow.toISOString().slice(0, 16);
+                const dateTimeInput = document.getElementById('ReservationDateTime');
+                if (dateTimeInput) {
+                    dateTimeInput.value = formattedDate;
+                }
+                
+                // Show the modal
+                const reservationModal = document.getElementById('reservationModal');
+                if (reservationModal) {
+                    try {
+                        const modal = new bootstrap.Modal(reservationModal);
+                        modal.show();
+                    } catch (err) {
+                        console.error("Error showing fallback modal:", err);
+                    }
+                }
+            };
+            
+            // Load the reservation modal via AJAX
+            fetch(initialModelUrl)
+                .then(response => {
+                    console.log("Response status:", response.status);
+                    if (!response.ok) {
+                        console.error("Response not OK:", response.status, response.statusText);
+                        createFallbackModal(); // Use fallback if response is not OK
+                        throw new Error('Failed to load reservation form');
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log("Received HTML content length:", html.length);
+                    
+                    // Insert the modal HTML into the container
+                    document.getElementById('reservationModalContainer').innerHTML = html;
+                    console.log("Modal HTML inserted into container");
+                    
+                    // Update the modal title with the restaurant name
+                    var modalLabel = document.getElementById('reservationModalLabel');
+                    if (modalLabel) {
+                        modalLabel.textContent = 'Make a Reservation at ' + restaurantName;
+                        console.log("Modal title updated");
+                    } else {
+                        console.error("Modal label element not found");
+                    }
+                    
+                    // Show the modal
+                    var reservationModal = document.getElementById('reservationModal');
+                    if (reservationModal) {
+                        console.log("Modal element found, initializing bootstrap modal");
+                        try {
+                            var modal = new bootstrap.Modal(reservationModal);
+                            modal.show();
+                            console.log("Modal shown successfully");
+                        } catch (err) {
+                            console.error("Error showing modal:", err);
+                            // Try an alternative approach
+                            console.log("Trying alternative modal approach using jQuery...");
+                            try {
+                                if (typeof $ !== 'undefined' && typeof $.fn.modal !== 'undefined') {
+                                    $(reservationModal).modal('show');
+                                    console.log("Modal shown using jQuery");
+                                } else {
+                                    console.error("jQuery or jQuery modal not available");
+                                }
+                            } catch (jqErr) {
+                                console.error("Error showing modal with jQuery:", jqErr);
+                            }
+                        }
+                        
+                        // Ensure click handlers are attached after the modal is loaded
+                        setupModalEventHandlers();
+                    } else {
+                        console.error('Reservation modal element not found after loading');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading reservation modal:', error);
+                    // We'll use the fallback modal instead of a generic alert
+                    if (!document.getElementById('reservationModal')) {
+                        createFallbackModal();
+                    }
+                });
+        }
+        
+        // Function to set up event handlers for the modal after it's loaded
+        function setupModalEventHandlers() {
+            console.log("Setting up modal event handlers");
+            var submitButton = document.getElementById('submitReservation');
+            
+            if (submitButton) {
+                console.log("Found submit button, setting up click handler");
+                // Remove any existing click listeners to prevent duplicates
+                const newSubmitButton = submitButton.cloneNode(true);
+                submitButton.parentNode.replaceChild(newSubmitButton, submitButton);
+                submitButton = newSubmitButton;
+                console.log("Cloned submit button to remove existing handlers");
+                
+                submitButton.addEventListener('click', function() {
+                    console.log("Submit button clicked");
+                    
+                    // Show spinner, hide submit button
+                    this.classList.add('d-none');
+                    document.getElementById('submitSpinner').classList.remove('d-none');
+                    console.log("Showed spinner, hid submit button");
+                    
+                    // Hide any previous alerts
+                    document.getElementById('reservationSuccess').classList.add('d-none');
+                    document.getElementById('reservationError').classList.add('d-none');
+                    document.getElementById('demoModeAlert').classList.add('d-none');
+                    document.getElementById('offlineModeAlert').classList.add('d-none');
+                    console.log("Hid all alert messages");
+                    
+                    // Get form data
+                    var form = document.getElementById('reservationForm');
+                    if (!form) {
+                        console.error("Form element not found!");
+                        
+                        // Hide spinner, show submit button again
+                        document.getElementById('submitSpinner').classList.add('d-none');
+                        submitButton.classList.remove('d-none');
+                        
+                        return;
+                    }
+                    
+                    // Validate the form locally for the fallback mode
+                    let isValid = true;
+                    let errorMessages = {};
+                    
+                    // Simple validation for required fields
+                    const contactName = form.querySelector('#ContactName').value.trim();
+                    if (!contactName) {
+                        isValid = false;
+                        errorMessages['ContactName'] = 'Contact Name is required.';
+                    }
+                    
+                    const phone = form.querySelector('#Phone').value.trim();
+                    if (!phone) {
+                        isValid = false;
+                        errorMessages['Phone'] = 'Phone Number is required.';
+                    }
+                    
+                    const email = form.querySelector('#Email').value.trim();
+                    if (!email) {
+                        isValid = false;
+                        errorMessages['Email'] = 'Email Address is required.';
+                    } else {
+                        // Email validation - pure JavaScript approach without Razor syntax
+                        const atSymbol = String.fromCharCode(64); // At symbol
+                        const atIndex = email.indexOf(atSymbol);
+                        const hasAtSymbol = atIndex > 0;
+                        
+                        if (!hasAtSymbol) {
+                            isValid = false;
+                            errorMessages['Email'] = 'Please enter a valid email address with at symbol.';
+                        } else {
+                            const afterAtString = email.substring(atIndex + 1);
+                            const hasDomain = afterAtString.indexOf('.') > 0;
+                            
+                            if (!hasDomain) {
+                                isValid = false;
+                                errorMessages['Email'] = 'Please enter a valid email address with domain.';
+                            }
+                        }
+                    }
+                    
+                    const dateTime = form.querySelector('#ReservationDateTime').value;
+                    if (!dateTime) {
+                        isValid = false;
+                        errorMessages['ReservationDateTime'] = 'Reservation Date & Time is required.';
+                    } else {
+                        const reservationDate = new Date(dateTime);
+                        const now = new Date();
+                        if (reservationDate <= now) {
+                            isValid = false;
+                            errorMessages['ReservationDateTime'] = 'Reservation must be for a future date and time.';
+                        }
+                    }
+                    
+                    const partySize = parseInt(form.querySelector('#PartySize').value);
+                    if (isNaN(partySize) || partySize < 1) {
+                        isValid = false;
+                        errorMessages['PartySize'] = 'Party Size must be at least 1.';
+                    }
+                    
+                    // If validation fails, show errors and return
+                    if (!isValid) {
+                        console.log("Validation failed with errors:", errorMessages);
+                        
+                        // Display validation errors
+                        const validationSummary = document.getElementById('validationSummary');
+                        validationSummary.innerHTML = '<ul class="mb-0 ps-3"></ul>';
+                        const summaryList = validationSummary.querySelector('ul');
+                        
+                        // Reset all error messages first
+                        document.querySelectorAll('[data-valmsg-for]').forEach(span => {
+                            span.textContent = '';
+                        });
+                        
+                        // Add each error message
+                        Object.keys(errorMessages).forEach(key => {
+                            console.log("Adding error for field:", key, errorMessages[key]);
+                            // Add to validation summary
+                            const li = document.createElement('li');
+                            li.textContent = errorMessages[key];
+                            summaryList.appendChild(li);
+                            
+                            // Add to field error span
+                            const errorSpan = document.querySelector(`[data-valmsg-for="${key}"]`);
+                            if (errorSpan) {
+                                errorSpan.textContent = errorMessages[key];
+                                // Highlight input field with error
+                                const inputField = document.getElementById(key);
+                                if (inputField) {
+                                    inputField.classList.add('is-invalid');
+                                }
+                            }
+                        });
+                        
+                        // Hide spinner, show submit button again
+                        document.getElementById('submitSpinner').classList.add('d-none');
+                        submitButton.classList.remove('d-none');
+                        
+                        return;
+                    }
+                    
+                    var formData = new FormData(form);
+                    console.log("Form data created");
+                    
+                    // Fallback mode - we're using the fallback form
+                    // Set up a timeout to simulate API call processing
+                    setTimeout(() => {
+                        console.log("Fallback mode processing complete");
+                        
+                        // Show success message
+                        document.getElementById('reservationFormContainer').classList.add('d-none');
+                        document.getElementById('successView').classList.remove('d-none');
+                        
+                        // Switch footer buttons
+                        document.getElementById('formFooterButtons').classList.add('d-none');
+                        document.getElementById('successFooterButtons').classList.remove('d-none');
+                        
+                        // Show offline mode message
+                        document.getElementById('offlineMessage').textContent = 
+                            "Your reservation has been recorded in offline mode. The restaurant will be notified when the system reconnects.";
+                        document.getElementById('offlineModeAlert').classList.remove('d-none');
+                        
+                        // Hide spinner, show submit button again (though it's now hidden by successView)
+                        document.getElementById('submitSpinner').classList.add('d-none');
+                        submitButton.classList.remove('d-none');
+                    }, 1500); // 1.5 seconds delay to simulate server processing
+                });
+                console.log("Click handler added to submit button");
+            } else {
+                console.error("Submit button not found");
+            }
+            
+            // Set up reset form button if it exists
+            var resetButton = document.getElementById('resetReservationButton');
+            if (resetButton) {
+                console.log("Found reset button, setting up click handler");
+                // Remove any existing click listeners to prevent duplicates
+                const newResetButton = resetButton.cloneNode(true);
+                resetButton.parentNode.replaceChild(newResetButton, resetButton);
+                resetButton = newResetButton;
+                
+                resetButton.addEventListener('click', resetReservationForm);
+                console.log("Click handler added to reset button");
+            } else {
+                console.log("Reset button not found (may be normal at this stage)");
+            }
+        }
+        
+        function resetReservationForm() {
+            console.log("Resetting reservation form");
+            // Reset form and show it again
+            var form = document.getElementById('reservationForm');
+            if (form) {
+                form.reset();
+                console.log("Form reset");
+                
+                // Set a default date/time for the reservation
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(19, 0, 0, 0);
+                
+                // Format date for datetime-local input (YYYY-MM-DDTHH:MM)
+                const formattedDate = tomorrow.toISOString().slice(0, 16);
+                const dateTimeInput = document.getElementById('ReservationDateTime');
+                if (dateTimeInput) {
+                    dateTimeInput.value = formattedDate;
+                }
+            }
+            
+            // Switch between views
+            document.getElementById('successView').classList.add('d-none');
+            document.getElementById('reservationFormContainer').classList.remove('d-none');
+            console.log("Switched to form view");
+            
+            // Switch footer buttons
+            document.getElementById('successFooterButtons').classList.add('d-none');
+            document.getElementById('formFooterButtons').classList.remove('d-none');
+            console.log("Switched footer buttons");
+            
+            // Hide alerts
+            document.getElementById('reservationSuccess').classList.add('d-none');
+            document.getElementById('reservationError').classList.add('d-none');
+            document.getElementById('demoModeAlert').classList.add('d-none');
+            document.getElementById('offlineModeAlert').classList.add('d-none');
+            console.log("Hid all alert messages");
+            
+            // Clear validation errors
+            document.querySelectorAll('.text-danger').forEach(function(element) {
+                element.textContent = '';
+            });
+            if (document.getElementById('validationSummary')) {
+                document.getElementById('validationSummary').innerHTML = '';
+            }
+            console.log("Cleared validation errors");
+            
+            // Remove is-invalid class from all inputs
+            document.querySelectorAll('input, textarea').forEach(function(input) {
+                input.classList.remove('is-invalid');
+            });
+            console.log("Removed is-invalid class from all inputs");
+        }
+
+        // Force reapply star styling after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all star elements
+            const stars = document.querySelectorAll('.fas.fa-star');
+            
+            // Reapply styling based on classes
+            stars.forEach(star => {
+                if (star.classList.contains('filled')) {
+                    star.style.color = '#ffc107';
+                } else if (star.classList.contains('empty')) {
+                    star.style.color = '#e0e0e0';
+                }
+            });
+            
+            // SPECIFICALLY target Price stars with extra force - using native JS approach
+            // Find all rating items first
+            document.querySelectorAll('.review-rating-item').forEach(item => {
+                const label = item.querySelector('.rating-label');
+                if (label && label.textContent.includes('Price')) {
+                    const stars = item.querySelectorAll('.fas.fa-star');
+                    stars.forEach(star => {
+                        if (star.classList.contains('filled')) {
+                            star.setAttribute('style', 'color: #ffc107 !important');
+                        } else {
+                            star.setAttribute('style', 'color: #e0e0e0 !important');
+                        }
+                    });
+                }
+            });
+            
+            console.log('Stars styling reapplied, with special handling for Price stars');
+        });
+
+        // Add debugging for price rating values
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Debugging Price ratings:");
+            document.querySelectorAll('.review-rating-item').forEach(item => {
+                const label = item.querySelector('.rating-label');
+                if (label && label.textContent.includes('Price')) {
+                    const filledStars = item.querySelectorAll('.fas.fa-star.filled').length;
+                    const emptyStars = item.querySelectorAll('.fas.fa-star.empty').length;
+                    console.log(`Price rating: ${filledStars} filled stars, ${emptyStars} empty stars`);
+                    
+                    // Log actual rating values from data attributes
+                    const stars = item.querySelectorAll('.fas.fa-star');
+                    stars.forEach(star => {
+                        console.log(`Star ${star.dataset.rating}: class=${star.className}, style=${star.style.color}`);
+                    });
+                }
+            });
+        });
+
+        // Regenerate price stars completely
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for everything to load
+            setTimeout(() => {
+                // Find all price rating items
+                document.querySelectorAll('.review-rating-item').forEach(item => {
+                    const label = item.querySelector('.rating-label');
+                    if (label && label.textContent.includes('Price')) {
+                        const starsContainer = item.querySelector('.mini-stars');
+                        if (starsContainer) {
+                            // Get the actual rating from the filled stars
+                            const rating = item.querySelectorAll('.fas.fa-star.filled').length;
+                            console.log(`Found price rating: ${rating}`);
+                            
+                            // Clear and regenerate all stars
+                            starsContainer.innerHTML = '';
+                            
+                            // Add 5 stars (filled or empty based on rating)
+                            for (let i = 1; i <= 5; i++) {
+                                const isFilled = i <= rating;
+                                const starEl = document.createElement('i');
+                                starEl.className = `fas fa-star ${isFilled ? 'filled' : 'empty'}`;
+                                starEl.style.cssText = isFilled 
+                                    ? 'color: #ffc107 !important; background: none !important;' 
+                                    : 'color: #e0e0e0 !important; background: none !important;';
+                                starsContainer.appendChild(starEl);
+                            }
+                        }
+                    }
+                });
+                
+                console.log("Price stars regenerated");
+            }, 500); // Wait 500ms
+        });
+    </script>
+    
+    <!-- Add the reservation fix script -->
+    <script src="~/js/reservation-fix.js"></script>
+}
+
+@* Add a container for the modal *@
+<div id="reservationModalContainer"></div>

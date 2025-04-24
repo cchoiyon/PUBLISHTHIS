@@ -1,0 +1,101 @@
+﻿@* Add this if you need to check specific claims like Role directly *@
+@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Yelp 2.0</title>
+    @* Links to CSS (Bootstrap, site.css) *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* Add other head elements if needed *@
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                @* --- Dynamic Brand/Home Link Logic --- *@
+                @{
+                    // Default to the LOGIN page for logged-out users
+                    string homeController = "Account";
+                    string homeAction = "Login";
+
+                    // Check if the user is logged in
+                    if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        // If logged in, determine their role dashboard homepage
+                        if (User.IsInRole("Reviewer"))
+                        {
+                            homeController = "ReviewerHome";
+                            homeAction = "Index";
+                        }
+                        else if (User.IsInRole("RestaurantRep"))
+                        {
+                            homeController = "RestaurantRepHome";
+                            homeAction = "Index";
+                        }
+                        // Add other roles if necessary
+                        // else { /* Optional: Default for authenticated users without a specific role dashboard */
+                        //    homeController = "Home"; // Fallback to generic Home if needed for some auth users
+                        //    homeAction = "Index";
+                        // }
+                    }
+                    // homeController and homeAction now point to Login page or Role Dashboard Index
+                }
+                @* Use the determined controller and action for the Brand link *@
+                <a class="navbar-brand" asp-area="" asp-controller="@homeController" asp-action="@homeAction">Yelp 2.0</a>
+                @* --- End Dynamic Link Logic --- *@
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @* Use the same determined controller and action for the "Home" nav item *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="@homeController" asp-action="@homeAction">Home</a>
+                        </li>
+
+                        
+
+                        @if (User.IsInRole("Reviewer"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ReviewerHome" asp-action="ManageReviews">Manage My Reviews</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("RestaurantRep"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="RestaurantRepHome" asp-action="ManageProfile">Manage Restaurant</a>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - Yelp 2.0 - 
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

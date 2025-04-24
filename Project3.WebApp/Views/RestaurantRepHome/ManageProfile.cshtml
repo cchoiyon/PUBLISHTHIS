@@ -1,0 +1,304 @@
+﻿@* Use the RestaurantViewModel for this view *@
+@model Project3.Shared.Models.ViewModels.RestaurantViewModel
+@{
+    ViewData["Title"] = ViewData["Title"] ?? "Manage Restaurant Profile";
+    var isNewProfile = ViewData["IsNewProfile"] as bool? ?? true;
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="ManageProfile" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <input type="hidden" asp-for="RestaurantID" />
+        @if (!string.IsNullOrEmpty(Model.ProfilePhoto))
+        {
+            <input type="hidden" asp-for="ProfilePhoto" />
+        }
+        @if (!string.IsNullOrEmpty(Model.LogoPhoto))
+        {
+            <input type="hidden" asp-for="LogoPhoto" />
+        }
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Basic Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Restaurant Name</label>
+                            <input asp-for="Name" class="form-control" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Owner" class="form-label">Owner Name</label>
+                            <input asp-for="Owner" class="form-control" />
+                            <span asp-validation-for="Owner" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Cuisine" class="form-label">Cuisine Type</label>
+                            <div class="input-group">
+                                <select id="cuisineSelect" class="form-select" asp-items="@(ViewData["Cuisines"] as SelectList)">
+                                    <option value="">-- Select Cuisine --</option>
+                                    <option value="custom">-- Enter Custom Cuisine --</option>
+                                </select>
+                                <input asp-for="Cuisine" id="cuisineInput" class="form-control" style="display: none;" placeholder="Enter custom cuisine type" />
+                            </div>
+                            <span asp-validation-for="Cuisine" class="text-danger"></span>
+                            <small class="form-text text-muted">Select from the list or choose "Enter Custom Cuisine" to add your own</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Hours" class="form-label">Operating Hours</label>
+                            <textarea asp-for="Hours" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Hours" class="text-danger"></span>
+                            <small class="form-text text-muted">Example: Mon-Fri: 11am-10pm, Sat-Sun: 12pm-11pm</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Contact Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Street Address</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="City" class="form-label">City</label>
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="State" class="form-label">State</label>
+                                <input asp-for="State" class="form-control" maxlength="2" />
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="ZipCode" class="form-label">ZIP Code</label>
+                                <input asp-for="ZipCode" class="form-control" maxlength="5" />
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Contact" class="form-label">Contact Information</label>
+                            <input asp-for="Contact" class="form-control" />
+                            <span asp-validation-for="Contact" class="text-danger"></span>
+                            <small class="form-text text-muted">Phone number and email</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Online Presence</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="WebsiteURL" class="form-label">Website URL</label>
+                            <input asp-for="WebsiteURL" class="form-control" type="url" />
+                            <span asp-validation-for="WebsiteURL" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SocialMedia" class="form-label">Social Media Links</label>
+                            <textarea asp-for="SocialMedia" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="SocialMedia" class="text-danger"></span>
+                            <small class="form-text text-muted">Enter your social media links (Facebook, Instagram, Twitter, etc.)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MarketingDescription" class="form-label">Restaurant Description</label>
+                            <textarea asp-for="MarketingDescription" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="MarketingDescription" class="text-danger"></span>
+                            <small class="form-text text-muted">Describe your restaurant, specialties, and what makes it unique</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Profile Photo</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(Model.ProfilePhoto))
+                        {
+                            <div class="mb-3">
+                                <img src="@Model.ProfilePhoto" alt="Current Profile Photo" class="img-thumbnail" style="max-width: 200px;" />
+                            </div>
+                        }
+                        <div class="mb-3">
+                            <label asp-for="ProfilePhotoFile" class="form-label">Update Profile Photo</label>
+                            <input type="file" asp-for="ProfilePhotoFile" class="form-control" accept="image/*" />
+                            <span asp-validation-for="ProfilePhotoFile" class="text-danger"></span>
+                            <small class="form-text text-muted">Leave empty to keep current photo</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Logo</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(Model.LogoPhoto))
+                        {
+                            <div class="mb-3">
+                                <img src="@Model.LogoPhoto" alt="Current Logo" class="img-thumbnail" style="max-width: 200px;" />
+                            </div>
+                        }
+                        <div class="mb-3">
+                            <label asp-for="LogoPhotoFile" class="form-label">Update Logo</label>
+                            <input type="file" asp-for="LogoPhotoFile" class="form-control" accept="image/*" />
+                            <span asp-validation-for="LogoPhotoFile" class="text-danger"></span>
+                            <small class="form-text text-muted">Leave empty to keep current logo</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-5">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Restaurant Gallery</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="GalleryImageFiles" class="form-label">Upload Gallery Images</label>
+                            <input type="file" asp-for="GalleryImageFiles" class="form-control" multiple accept="image/*" />
+                            <span asp-validation-for="GalleryImageFiles" class="text-danger"></span>
+                            <small class="form-text text-muted">Select multiple images to create a gallery for your restaurant. Maximum 10 files, 2MB per file.</small>
+                        </div>
+                        
+                        @if (Model.GalleryImages != null && Model.GalleryImages.Any())
+                        {
+                            <div class="mt-3">
+                                <h6>Current Gallery Images (@Model.GalleryImages.Count)</h6>
+                                <div class="row">
+                                    @foreach (var image in Model.GalleryImages.Take(4))
+                                    {
+                                        <div class="col-md-3 mb-2">
+                                            <img src="@image.ImagePath" alt="@image.Caption" class="img-thumbnail" style="height: 120px; object-fit: cover;" />
+                                        </div>
+                                    }
+                                </div>
+                                @if (Model.GalleryImages.Count > 4)
+                                {
+                                    <div class="mt-2">
+                                        <a asp-action="ManageGallery" asp-route-id="@Model.RestaurantID" class="btn btn-sm btn-outline-primary">
+                                            View All Gallery Images
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-5">
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    @(isNewProfile ? "Create Profile" : "Save Changes")
+                </button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg px-5 ms-3">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Enable Bootstrap form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        // Handle custom cuisine input
+        $(document).ready(function() {
+            // Check if a custom cuisine is already set
+            var cuisineValue = "@Model.Cuisine";
+            var selectValue = $("#cuisineSelect option").filter(function() {
+                return $(this).text() === cuisineValue;
+            }).val();
+            
+            if (selectValue) {
+                // If cuisine exists in dropdown, select it and hide input
+                $("#cuisineSelect").val(selectValue);
+                $("#cuisineInput").hide();
+            } else if (cuisineValue) {
+                // If cuisine doesn't exist in dropdown but has a value, show custom input with value
+                $("#cuisineSelect").val("custom");
+                $("#cuisineInput").show().val(cuisineValue);
+            }
+            
+            // Handle dropdown change
+            $("#cuisineSelect").change(function() {
+                var value = $(this).val();
+                if (value === "custom") {
+                    // Show custom input field
+                    $("#cuisineInput").show().focus();
+                    $("#cuisineInput").val(""); // Clear any previous value
+                } else {
+                    // Hide custom input and set Cuisine value to selected option text
+                    $("#cuisineInput").hide();
+                    if (value) {
+                        var selectedText = $("#cuisineSelect option:selected").text();
+                        $("#cuisineInput").val(selectedText);
+                    } else {
+                        // Clear the input if "-- Select Cuisine --" is chosen
+                        $("#cuisineInput").val("");
+                    }
+                }
+            });
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

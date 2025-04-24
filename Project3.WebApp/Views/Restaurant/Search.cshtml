@@ -1,0 +1,68 @@
+@model SearchCriteriaViewModel
+@{
+    ViewData["Title"] = "Search Restaurants";
+    Layout = "_AppLayout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Find Restaurants</h1>
+            
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success">@TempData["Message"]</div>
+            }
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Search Criteria</h5>
+                </div>
+                <div class="card-body">
+                    @await Component.InvokeAsync("SearchForm", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-selection--multiple {
+            min-height: 38px !important;
+            border: 1px solid #ced4da !important;
+        }
+        .select2-container .select2-selection--single,
+        .select2-container .select2-selection--multiple {
+            height: auto;
+            border-radius: 0.25rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Remove validation messages that might interfere with the form
+            $('.validation-summary-errors').remove();
+            $('.field-validation-error').remove();
+            
+            // Initialize Select2 on the cuisines dropdown
+            $('.select2-multiple').select2({
+                placeholder: "Select cuisines (leave empty for all)",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+} 

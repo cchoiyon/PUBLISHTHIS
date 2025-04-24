@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Access Denied - Yelp 2.0";
+    // Use your main app layout or a specific error layout
+    Layout = "_AppLayout";
+}
+
+<div class="login-graphic-col">
+    <h1 class="graphic-title">Yelp 2.0</h1>
+</div>
+
+<header>
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-danger">You do not have permission to access this resource.</p>
+</header>
+
+<hr />
+
+<p>
+    If you believe you should have access, please contact the site administrator or try logging in with appropriate credentials.
+</p>
+<p>
+    <a asp-action="Index" asp-controller="Home">Return to Home Page</a>
+    @* Or provide a link back to login if appropriate *@
+    @* <a asp-action="Login" asp-controller="Account">Return to Login</a> *@
+</p>
+

@@ -1,0 +1,63 @@
+/* Star Rating Modern Styles */
+.rating-card {
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.rating-card:nth-child(odd) {
+    background-color: #f0f7ff;
+    color: #333;
+}
+
+.rating-card:nth-child(even) {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #dee2e6;
+}
+
+.rating-question {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.star-rating-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row; /* Left to right (1-5) */
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    margin: 0 8px;
+}
+
+/* Remove all color styles - we'll handle this with JavaScript */
+.star-rating label .fas {
+    /* Default style. JavaScript will change the color */
+}
+
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.active-card {
+    border: 1px solid #ffc107;
+} 

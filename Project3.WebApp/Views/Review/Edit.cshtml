@@ -1,0 +1,236 @@
+﻿@model Project3.Shared.Models.ViewModels.ReviewViewModel
+@{
+    ViewData["Title"] = "Edit Review";
+    Layout = "_AppLayout";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.DebugInfo))
+{
+    <div class="alert alert-info">
+        @ViewBag.DebugInfo
+    </div>
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Edit Your Review for @Model.RestaurantName</h2>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="Edit" method="post" id="reviewForm">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        
+                        <input type="hidden" asp-for="ReviewID" />
+                        <input type="hidden" asp-for="RestaurantID" />
+                        <input type="hidden" asp-for="UserID" />
+                        <input type="hidden" asp-for="RestaurantName" />
+                        <input type="hidden" asp-for="ReviewerUsername" value="@User.Identity.Name" />
+                        
+                        <div class="mb-4">
+                            <label asp-for="VisitDate" class="form-label">When did you visit?</label>
+                            <input asp-for="VisitDate" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="VisitDate" class="text-danger"></span>
+                        </div>
+
+                        <!-- Star ratings section -->
+                        <div class="mb-4 rating-section">
+                            <!-- Food Rating -->
+                            <div class="mb-4 rating-card">
+                                <p class="rating-question">How would you rate the food quality?</p>
+                                <div class="star-rating-container">
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <input type="radio" class="star-radio" id="food-star-@i" name="food_stars" value="@i" 
+                                                   @(Model.FoodQualityRating == i ? "checked" : "") />
+                                            <label for="food-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                        }
+                                    </div>
+                                    <div class="rating-labels">
+                                        <span>Bad</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="FoodQualityRating" id="FoodQualityRating" />
+                            
+                            <!-- Service Rating -->
+                            <div class="mb-4 rating-card">
+                                <p class="rating-question">How was the service?</p>
+                                <div class="star-rating-container">
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <input type="radio" class="star-radio" id="service-star-@i" name="service_stars" value="@i" 
+                                                   @(Model.ServiceRating == i ? "checked" : "") />
+                                            <label for="service-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                        }
+                                    </div>
+                                    <div class="rating-labels">
+                                        <span>Bad</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="ServiceRating" id="ServiceRating" />
+                            
+                            <!-- Atmosphere Rating -->
+                            <div class="mb-4 rating-card">
+                                <p class="rating-question">How was the atmosphere?</p>
+                                <div class="star-rating-container">
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <input type="radio" class="star-radio" id="atmosphere-star-@i" name="atmosphere_stars" value="@i" 
+                                                   @(Model.AtmosphereRating == i ? "checked" : "") />
+                                            <label for="atmosphere-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                        }
+                                    </div>
+                                    <div class="rating-labels">
+                                        <span>Bad</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="AtmosphereRating" id="AtmosphereRating" />
+                            
+                            <!-- Price Rating -->
+                            <div class="mb-4 rating-card">
+                                <p class="rating-question">How would you rate the price/value?</p>
+                                <div class="star-rating-container">
+                                    <div class="star-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <input type="radio" class="star-radio" id="price-star-@i" name="price_stars" value="@i" 
+                                                   @(Model.PriceRating == i ? "checked" : "") />
+                                            <label for="price-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                        }
+                                    </div>
+                                    <div class="rating-labels">
+                                        <span>Bad</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="PriceRating" id="PriceRating" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Comments" class="form-label">Your Review</label>
+                            <textarea asp-for="Comments" class="form-control" rows="6" placeholder="Tell us about your experience..."></textarea>
+                            <span asp-validation-for="Comments" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@Model.RestaurantID" class="btn btn-secondary me-md-2">Cancel</a>
+                            <button type="button" id="updateButton" class="btn btn-primary">Update Review</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/review/star-rating.css" />
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners for all star radios
+            var radios = document.querySelectorAll('.star-radio');
+            
+            // Function to update star colors for a specific rating group
+            function updateStarColors(groupName, selectedValue) {
+                // Get all stars in this group
+                const stars = document.querySelectorAll(`[id^="${groupName}-star-"] + label .fas`);
+                
+                // Reset all stars to gray
+                stars.forEach(star => {
+                    star.style.color = '#ccc';
+                });
+                
+                // Color stars up to the selected value yellow
+                for (let i = 0; i < selectedValue; i++) {
+                    if (stars[i]) {
+                        stars[i].style.color = '#ffc107';
+                    }
+                }
+            }
+            
+            // Initialize all star colors based on initial values
+            updateStarColors('food', @Model.FoodQualityRating);
+            updateStarColors('service', @Model.ServiceRating);
+            updateStarColors('atmosphere', @Model.AtmosphereRating);
+            updateStarColors('price', @Model.PriceRating);
+            
+            // Add event listener to each radio button
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    // Update the corresponding display
+                    var name = this.name;
+                    var value = parseInt(this.value);
+                    
+                    // Update hidden model field and star colors
+                    if (name === 'food_stars') {
+                        document.getElementById('FoodQualityRating').value = value;
+                        updateStarColors('food', value);
+                    } else if (name === 'service_stars') {
+                        document.getElementById('ServiceRating').value = value;
+                        updateStarColors('service', value);
+                    } else if (name === 'atmosphere_stars') {
+                        document.getElementById('AtmosphereRating').value = value;
+                        updateStarColors('atmosphere', value);
+                    } else if (name === 'price_stars') {
+                        document.getElementById('PriceRating').value = value;
+                        updateStarColors('price', value);
+                    }
+                    
+                    console.log('Updated ' + name + ' to ' + value);
+                });
+            });
+            
+            // Set up event handler for the Update Review button
+            var updateButton = document.getElementById('updateButton');
+            var form = document.getElementById('reviewForm');
+            
+            if (updateButton && form) {
+                updateButton.addEventListener('click', function(e) {
+                    // Copy values from the radio buttons to the model fields
+                    var foodRadio = document.querySelector('input[name="food_stars"]:checked');
+                    var serviceRadio = document.querySelector('input[name="service_stars"]:checked');
+                    var atmosphereRadio = document.querySelector('input[name="atmosphere_stars"]:checked');
+                    var priceRadio = document.querySelector('input[name="price_stars"]:checked');
+                    
+                    if (foodRadio) document.getElementById('FoodQualityRating').value = foodRadio.value;
+                    if (serviceRadio) document.getElementById('ServiceRating').value = serviceRadio.value;
+                    if (atmosphereRadio) document.getElementById('AtmosphereRating').value = atmosphereRadio.value;
+                    if (priceRadio) document.getElementById('PriceRating').value = priceRadio.value;
+                    
+                    // Log the values about to be submitted
+                    console.log('Submitting review with ratings:');
+                    console.log('Food: ' + document.getElementById('FoodQualityRating').value);
+                    console.log('Service: ' + document.getElementById('ServiceRating').value);
+                    console.log('Atmosphere: ' + document.getElementById('AtmosphereRating').value);
+                    console.log('Price: ' + document.getElementById('PriceRating').value);
+                    
+                    // Submit the form
+                    form.submit();
+                });
+            }
+        });
+    </script>
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

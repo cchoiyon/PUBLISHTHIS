@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Import Restaurant Data";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Import Restaurant Data</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        Import your restaurant data from a previously exported XML file. This will overwrite your current profile information.
+                    </p>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    <form asp-action="ImportRestaurantData" enctype="multipart/form-data" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-4">
+                            <label for="importFile" class="form-label">Restaurant Data File</label>
+                            <input type="file" class="form-control" id="importFile" name="importFile" accept=".xml" required />
+                            <div class="form-text">Select an XML file previously exported from this system.</div>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Warning:</strong> Importing will replace your current restaurant data. Make sure to backup your information if needed.
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Import Data</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <p class="text-muted mb-0"><small>Need to export your data instead? <a asp-action="ExportRestaurantData">Click here to export</a></small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

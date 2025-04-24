@@ -1,0 +1,94 @@
+﻿@* Reference the ViewModel passed from the Controller *@
+@model Project3.Shared.Models.ViewModels.ReviewerHomeViewModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Reviewer Dashboard";
+    // Assuming you are using _AppLayout.cshtml for this page
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+}
+
+@* Reusing styles from Restaurant Rep page - consider moving to site.css *@
+<style>
+    body {
+        background-color: #fdfaf6; /* Light beige background */
+    }
+    .dashboard-card {
+        background-color: #fff;
+        border: 1px solid #eee;
+        border-radius: 0.75rem; /* Rounded corners */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Soft shadow */
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        height: 100%; /* Make cards in a row the same height */
+        display: flex;
+        flex-direction: column;
+    }
+    .dashboard-card .card-title {
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+    }
+     .dashboard-card .card-title i {
+        margin-right: 0.75rem;
+        color: #0d6efd; /* Bootstrap primary blue for icons */
+        font-size: 1.5rem;
+     }
+     .dashboard-card .card-text {
+        color: #6c757d; /* Bootstrap secondary text color */
+        flex-grow: 1; /* Pushes button to bottom if card height varies */
+        margin-bottom: 1rem;
+     }
+     .dashboard-card .btn {
+         margin-top: auto; /* Pushes button to bottom */
+     }
+     /* Icon colors can be customized */
+     .card-title-reviews i { color: #ffc107; } /* Yellow */
+     .card-title-search i { color: #198754; } /* Green */
+     .card-title-profile i { color: #6f42c1; } /* Purple */
+
+</style>
+
+@* Display potential error messages from Controller *@
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@* Main Welcome Header *@
+<div class="welcome-section">
+    <h1 class="display-5">@Model.WelcomeMessage</h1>
+    <p class="lead text-muted">Manage your reviews and account</p>
+</div>
+
+@* Main Dashboard Cards - Using Bootstrap Row/Columns *@
+<div class="row">
+    @* Column 1: My Reviews Card *@
+    <div class="col-md-6">
+        <div class="dashboard-card">
+            <h5 class="card-title card-title-reviews"><i class="fas fa-star"></i> My Reviews</h5> @* Font Awesome star icon *@
+            <p class="card-text">You have written <strong>@Model.TotalReviewsCount</strong> review(s).</p>
+            @* Button links to ManageReviews action in this controller *@
+            <a asp-action="ManageReviews" class="btn btn-primary">Manage My Reviews</a>
+        </div>
+    </div>
+
+    @* Column 2: Write Review Card *@
+    <div class="col-md-6">
+        <div class="dashboard-card">
+             <h5 class="card-title card-title-search"><i class="fas fa-search"></i> Write a Review</h5> @* Font Awesome search icon *@
+             <p class="card-text">Find restaurants and share your experience.</p>
+             @* Button links to Search action in RestaurantController *@
+             <a asp-controller="Restaurant" asp-action="Search" class="btn btn-success">Search Restaurants</a> @* Green button *@
+        </div>
+    </div>
+</div>
+
+@* Optional: Add other sections if needed, like recent activity feed *@
+
+@section Scripts {
+    @* Add any specific JavaScript for this page if needed *@
+}

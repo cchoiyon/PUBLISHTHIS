@@ -1,0 +1,154 @@
+@model List<Project3.Shared.Models.Domain.RestaurantImage>
+
+<div class="photo-gallery card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="bi bi-images text-primary me-2"></i>
+            @ViewBag.GalleryTitle
+        </h5>
+        @if (Model != null && Model.Count > 4)
+        {
+            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                View All Photos
+            </button>
+        }
+    </div>
+    <div class="card-body p-2">
+        @if (Model != null && Model.Count > 0)
+        {
+            <div class="row g-2">
+                @{
+                    var displayCount = Math.Min(Model.Count, 4);
+                    for (int i = 0; i < displayCount; i++)
+                    {
+                        <div class="col-6 col-md-3">
+                            <div class="gallery-image position-relative">
+                                <img src="@Model[i].ImagePath" alt="@(string.IsNullOrEmpty(Model[i].Caption) ? $"Photo {i+1}" : Model[i].Caption)" 
+                                     class="img-thumbnail w-100" style="height: 120px; object-fit: cover;" 
+                                     data-bs-toggle="modal" data-bs-target="#photoModal" 
+                                     data-photo-url="@Model[i].ImagePath" 
+                                     data-photo-caption="@(string.IsNullOrEmpty(Model[i].Caption) ? "" : Model[i].Caption)">
+                                
+                                @if (!string.IsNullOrEmpty(Model[i].Caption))
+                                {
+                                    <div class="caption-overlay position-absolute bottom-0 w-100 p-1 text-white bg-dark bg-opacity-50">
+                                        <small>@Model[i].Caption</small>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    if (Model.Count > 4)
+                    {
+                        <div class="col-12 text-center d-md-none mt-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                View All @Model.Count Photos
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <p class="text-muted mb-0">No photos available</p>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model != null && Model.Count > 0)
+{
+    <!-- Full Gallery Modal -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="galleryModalLabel">@ViewBag.GalleryTitle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        @foreach (var image in Model)
+                        {
+                            <div class="col-6 col-md-4">
+                                <div class="gallery-image position-relative">
+                                    <img src="@image.ImagePath" alt="@(string.IsNullOrEmpty(image.Caption) ? "Gallery photo" : image.Caption)" 
+                                         class="img-thumbnail w-100" style="height: 160px; object-fit: cover;"
+                                         data-bs-toggle="modal" data-bs-target="#photoModal" 
+                                         data-photo-url="@image.ImagePath" 
+                                         data-photo-caption="@(string.IsNullOrEmpty(image.Caption) ? "" : image.Caption)">
+                                    
+                                    @if (!string.IsNullOrEmpty(image.Caption))
+                                    {
+                                        <div class="caption-overlay position-absolute bottom-0 w-100 p-1 text-white bg-dark bg-opacity-50">
+                                            <small>@image.Caption</small>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Individual Photo Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel">Photo Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-0">
+                    <img id="modalPhoto" src="" alt="Full size photo" class="img-fluid">
+                    <div id="modalCaption" class="p-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const photoModal = document.getElementById('photoModal');
+            if (photoModal) {
+                photoModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const photoUrl = button.getAttribute('data-photo-url');
+                    const photoCaption = button.getAttribute('data-photo-caption');
+                    
+                    const modalPhoto = photoModal.querySelector('#modalPhoto');
+                    const modalCaption = photoModal.querySelector('#modalCaption');
+                    
+                    modalPhoto.src = photoUrl;
+                    modalCaption.textContent = photoCaption;
+                });
+            }
+        });
+    </script>
+}
+
+@if (ViewBag.ShowPagination == true)
+{
+    <div class="d-flex justify-content-center mt-3">
+        <nav aria-label="Gallery pagination">
+            <ul class="pagination">
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+} 

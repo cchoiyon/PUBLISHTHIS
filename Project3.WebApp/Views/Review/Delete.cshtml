@@ -1,0 +1,99 @@
+@model Project3.Shared.Models.ViewModels.ReviewViewModel
+@{
+    ViewData["Title"] = "Delete Review";
+    Layout = "_AppLayout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">Delete Review</h2>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <h4>Are you sure you want to delete this review?</h4>
+                    <hr />
+
+                    <div class="review-details mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h5>@Model.RestaurantName</h5>
+                            <small class="text-muted">Visit Date: @Model.VisitDate.ToString("MMMM d, yyyy")</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="review-ratings d-flex flex-wrap gap-3 mb-2">
+                                <div class="review-rating-item">
+                                    <span class="rating-label">Food Quality:</span>
+                                    <div class="d-inline-block">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= Model.FoodQualityRating ? "text-warning" : "text-muted")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="review-rating-item">
+                                    <span class="rating-label">Service:</span>
+                                    <div class="d-inline-block">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= Model.ServiceRating ? "text-warning" : "text-muted")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="review-rating-item">
+                                    <span class="rating-label">Atmosphere:</span>
+                                    <div class="d-inline-block">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= Model.AtmosphereRating ? "text-warning" : "text-muted")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="review-rating-item">
+                                    <span class="rating-label">Price/Value:</span>
+                                    <div class="d-inline-block">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= Model.PriceRating ? "text-warning" : "text-muted")"></i>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comments-section p-3 bg-light rounded">
+                            <p class="mb-0">@Model.Comments</p>
+                        </div>
+                    </div>
+                    
+                    <form asp-controller="Review" asp-action="DeleteConfirmed" method="post">
+                        <input type="hidden" name="id" value="@Model.ReviewID" />
+                        <input type="hidden" name="restaurantId" value="@Model.RestaurantID" />
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            This action cannot be undone. Once deleted, your review will be permanently removed.
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@Model.RestaurantID" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Delete Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

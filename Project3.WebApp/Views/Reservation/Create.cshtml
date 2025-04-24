@@ -1,0 +1,267 @@
+﻿@model ReservationViewModel
+@{
+    ViewData["Title"] = $"Make Reservation at {Model.RestaurantName}";
+    Layout = "_AppLayout"; // Use your main application layout
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        @if (ViewBag.DemoMode != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-info-circle me-2"></i> @ViewBag.DemoMode
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        @if (ViewBag.ApiConnectivityWarning != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-wifi-off me-2"></i> @ViewBag.ApiConnectivityWarning
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i> @TempData["WarningMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        <!-- Alert for success message -->
+        <div id="reservationSuccess" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+            <strong>Success!</strong> Your reservation has been submitted successfully. The restaurant will contact you if confirmation is needed.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Alert for error message -->
+        <div id="reservationError" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+            <strong>Error!</strong> <span id="errorMessage">There was a problem submitting your reservation.</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Alert for offline mode -->
+        <div id="offlineModeAlert" class="alert alert-info alert-dismissible fade show d-none" role="alert">
+            <i class="bi bi-cloud-upload me-2"></i> <span id="offlineMessage">Your reservation has been saved in offline mode.</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Alert for demo mode response -->
+        <div id="demoModeAlert" class="alert alert-info alert-dismissible fade show d-none" role="alert">
+            <i class="bi bi-info-circle me-2"></i> <span id="demoMessage">This is a demo mode response.</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div id="reservationFormContainer">
+            <form id="reservationForm" asp-action="CreateAjax" method="post">
+                @Html.AntiForgeryToken()
+                <div id="validationSummary" asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                @* Hidden field for RestaurantID *@
+                <input type="hidden" asp-for="RestaurantID" />
+                @* UserID is set by controller, no need for input unless handling guests differently *@
+
+                <div class="mb-3">
+                    <label asp-for="ContactName" class="form-label"></label>
+                    <input asp-for="ContactName" class="form-control" placeholder="Your Name" />
+                    <span asp-validation-for="ContactName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone" class="form-control" placeholder="Your Phone Number" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Your Email Address" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ReservationDateTime" class="form-label">Date & Time</label>
+                        @* Consider using separate date/time pickers if needed, requires JS *@
+                        <input asp-for="ReservationDateTime" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="ReservationDateTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PartySize" class="form-label"></label>
+                        <input asp-for="PartySize" type="number" min="1" class="form-control" placeholder="Number of Guests" />
+                        <span asp-validation-for="PartySize" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpecialRequests" class="form-label"></label>
+                    <textarea asp-for="SpecialRequests" class="form-control" rows="3" placeholder="Any special requests? (Optional)"></textarea>
+                    <span asp-validation-for="SpecialRequests" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
+                    <button id="submitReservation" type="submit" class="btn btn-primary">Submit Reservation Request</button>
+                    <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@Model.RestaurantID" class="btn btn-secondary">Cancel</a>
+                    <!-- Loading spinner - hidden by default -->
+                    <div id="submitSpinner" class="spinner-border text-primary d-none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Success view (hidden by default) -->
+        <div id="successView" class="d-none text-center">
+            <div class="mb-4">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+            </div>
+            <h2 class="mb-3">Reservation Confirmed!</h2>
+            <p class="lead mb-4">Your reservation request has been submitted successfully.</p>
+            <p>We've sent a confirmation to your email. The restaurant will contact you if any additional information is needed.</p>
+            <div class="mt-4">
+                <a href="javascript:void(0)" onclick="resetForm()" class="btn btn-outline-primary me-2">Make Another Reservation</a>
+                <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@Model.RestaurantID" class="btn btn-primary">Return to Restaurant</a>
+            </div>
+        </div>
+        
+        <!-- Offline success view (hidden by default) -->
+        <div id="offlineSuccessView" class="d-none text-center">
+            <div class="mb-4">
+                <i class="bi bi-cloud-check text-info" style="font-size: 5rem;"></i>
+            </div>
+            <h2 class="mb-3">Reservation Saved</h2>
+            <p class="lead mb-4">Your reservation has been saved in offline mode.</p>
+            <p>The system will process your reservation once it reconnects to the server. You can make additional reservations in the meantime.</p>
+            <div class="mt-4">
+                <a href="javascript:void(0)" onclick="resetForm()" class="btn btn-outline-primary me-2">Make Another Reservation</a>
+                <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@Model.RestaurantID" class="btn btn-primary">Return to Restaurant</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Wait for the DOM to be fully loaded
+        $(document).ready(function () {
+            // Handle form submission
+            $("#reservationForm").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submit
+                
+                // Show spinner, hide submit button
+                $("#submitReservation").addClass("d-none");
+                $("#submitSpinner").removeClass("d-none");
+                
+                // Hide any previous alerts
+                $("#reservationSuccess").addClass("d-none");
+                $("#reservationError").addClass("d-none");
+                $("#offlineModeAlert").addClass("d-none");
+                $("#demoModeAlert").addClass("d-none");
+                
+                // Clear all validation errors
+                $(".is-invalid").removeClass("is-invalid");
+                $(".field-validation-error").empty();
+                $("#validationSummary").empty();
+                
+                // Get form data
+                var formData = $(this).serialize();
+                
+                // Submit form using AJAX
+                $.ajax({
+                    url: '@Url.Action("CreateAjax", "Reservation")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.message && response.message.includes("demo mode")) {
+                                // Show demo mode message
+                                $("#demoMessage").text(response.message);
+                                $("#demoModeAlert").removeClass("d-none");
+                                
+                                // Show success view for demo
+                                $("#reservationFormContainer").addClass("d-none");
+                                $("#successView").removeClass("d-none");
+                            }
+                            else if (response.isOfflineMode) {
+                                // Show offline success view
+                                $("#reservationFormContainer").addClass("d-none");
+                                $("#offlineSuccessView").removeClass("d-none");
+                                
+                                // Also show the offline alert
+                                $("#offlineMessage").text(response.message);
+                                $("#offlineModeAlert").removeClass("d-none");
+                            } else {
+                                // Show regular success view
+                                $("#reservationFormContainer").addClass("d-none");
+                                $("#successView").removeClass("d-none");
+                            }
+                        } else {
+                            // Show error message
+                            $("#errorMessage").text(response.message || "There was a problem submitting your reservation.");
+                            $("#reservationError").removeClass("d-none");
+                            
+                            // Display validation errors if any
+                            if (response.errors) {
+                                // Display validation errors
+                                var validationSummary = $("#validationSummary");
+                                validationSummary.empty();
+                                
+                                $.each(response.errors, function (key, value) {
+                                    // Add errors to validation summary
+                                    validationSummary.append($("<li>").text(value));
+                                    
+                                    // Highlight fields with errors
+                                    $("[name='" + key + "']").addClass("is-invalid");
+                                    
+                                    // Add error message to the field
+                                    var errorSpan = $("[data-valmsg-for='" + key + "']");
+                                    errorSpan.text(value);
+                                    errorSpan.addClass("field-validation-error");
+                                });
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Show error message
+                        $("#errorMessage").text("An error occurred while processing your request. Please try again.");
+                        $("#reservationError").removeClass("d-none");
+                        console.error("AJAX Error: ", error);
+                    },
+                    complete: function () {
+                        // Hide spinner, show submit button again
+                        $("#submitSpinner").addClass("d-none");
+                        $("#submitReservation").removeClass("d-none");
+                    }
+                });
+            });
+        });
+        
+        // Function to reset the form and show it again
+        function resetForm() {
+            // Reset form fields
+            $("#reservationForm")[0].reset();
+            
+            // Hide success views, show form again
+            $("#successView").addClass("d-none");
+            $("#offlineSuccessView").addClass("d-none");
+            $("#reservationFormContainer").removeClass("d-none");
+            
+            // Clear all validation errors
+            $(".is-invalid").removeClass("is-invalid");
+            $(".field-validation-error").empty();
+            $("#validationSummary").empty();
+            
+            // Hide alerts
+            $("#demoModeAlert").addClass("d-none");
+            $("#offlineModeAlert").addClass("d-none");
+        }
+    </script>
+}

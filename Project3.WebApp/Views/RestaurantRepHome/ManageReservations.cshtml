@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Project3.Shared.Models.Domain.Reservation>
+@{
+    ViewData["Title"] = "Manage Reservations";
+    Layout = "_AppLayout"; // Use your main application layout
+    
+    // Get the RestaurantID from the first reservation or from ViewData
+    int restaurantId = 0;
+    if (Model != null && Model.Any())
+    {
+        restaurantId = Model.First().RestaurantID;
+    }
+    else if (ViewData.ContainsKey("RestaurantID"))
+    {
+        restaurantId = (int)ViewData["RestaurantID"];
+    }
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+@* Display Success/Error messages from TempData *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Customer Name</th>
+                <th>Party Size</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var res in Model)
+            {
+                <tr>
+                    <td>@res.ReservationDateTime.ToString("g")</td> @* General date/time format *@
+                    <td>@res.ContactName</td>
+                    <td>@res.PartySize</td>
+                    <td>
+                        @* Add badge/styling based on status *@
+                        @if (res.Status == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">@res.Status</span>
+                        }
+                        else if (res.Status == "Confirmed")
+                        {
+                            <span class="badge bg-success">@res.Status</span>
+                        }
+                        else if (res.Status == "Cancelled")
+                        {
+                            <span class="badge bg-danger">@res.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">@res.Status</span>
+                        }
+                    </td>
+                    <td>
+                        @* TODO: Add button/link to view full details (maybe modal?) *@
+
+                        @if (res.Status == "Pending")
+                        {
+                            <form asp-action="ConfirmReservation" asp-route-id="@res.ReservationID" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-success me-1" title="Confirm Reservation">Confirm</button>
+                            </form>
+                        }
+                        @if (res.Status == "Pending" || res.Status == "Confirmed")
+                        {
+                            <form asp-action="CancelReservation" asp-route-id="@res.ReservationID" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-warning me-1" title="Cancel Reservation">Cancel</button>
+                            </form>
+                        }
+                        <form asp-action="DeleteReservation" asp-route-id="@res.ReservationID" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger" title="Delete Reservation">Delete</button>
+                        </form>
+                        @* TODO: Add Edit functionality if needed *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">You currently have no reservations.</div>
+}
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Join restaurant group for real-time notifications
+            const restaurantId = @restaurantId;
+            
+            // Join the appropriate groups
+            joinContextGroups(currentUserId, restaurantId, true);
+            
+            // Setup for handling reservation status changes
+            $('.btn-update-status').click(function() {
+                const reservationId = $(this).data('id');
+                const newStatus = $(this).data('status');
+                updateReservationStatus(reservationId, newStatus);
+            });
+            
+            function updateReservationStatus(reservationId, newStatus) {
+                // Show loading state
+                $('#status-' + reservationId).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+                
+                $.ajax({
+                    url: '@Url.Action("UpdateStatus", "Reservation")/' + reservationId,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ status: newStatus }),
+                    success: function(result) {
+                        // Update UI
+                        $('#status-' + reservationId).text(newStatus);
+                        
+                        // Show success message
+                        showNotification(`Reservation #${reservationId} status updated to ${newStatus}`, 'success');
+                        
+                        // If approved/rejected, update buttons visibility
+                        if (newStatus === 'Approved' || newStatus === 'Rejected') {
+                            $(`#actions-${reservationId}`).html('<span class="badge bg-secondary">Status updated</span>');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Show error message
+                        $('#status-' + reservationId).text('Error');
+                        showNotification('Error updating reservation status', 'error');
+                        console.error(xhr);
+                    }
+                });
+            }
+        });
+    </script>
+}

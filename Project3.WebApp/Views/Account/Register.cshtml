@@ -1,0 +1,146 @@
+﻿@* Uses Yelp 2.0 Models.InputModels.RegisterModel *@
+@model Project3.Shared.Models.InputModels.RegisterModel
+@{
+    ViewData["Title"] = "Register - Yelp 2.0";
+    // Use null layout for standalone page using account styles
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/account-styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="login-container">
+        @* Left Column - Graphic Area *@
+        <div class="login-graphic-col">
+            <h1 class="graphic-title">Yelp 2.0</h1>
+        </div>
+
+        @* Right Column - Form Area *@
+        <div class="login-form-col">
+            <div class="login-form-panel register-panel">
+                @* Added register-panel class if needed for specific styling *@
+
+                <h1 class="login-title">Create Account</h1>
+                <p class="login-subtitle">Join our community of reviewers and restaurant owners.</p>
+
+                <form asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+
+                    @* Display general errors or validation summary *@
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                    @* Display specific error from controller if set *@
+                    @if (ViewData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">@ViewData["ErrorMessage"]</div>
+                    }
+
+                    <h4>Account Details</h4>
+                    <div class="mb-3">
+                        @* Using standard labels, not floating, for potentially better accessibility/simplicity *@
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control" autocomplete="username" placeholder="Choose a username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" autocomplete="email" placeholder="name@example.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" type="password" class="form-control" autocomplete="new-password" placeholder="Create a password (min 6 chars)" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" autocomplete="new-password" placeholder="Confirm your password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+                    <h4>Personal Details</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <hr />
+                    <h4>Account Type</h4>
+                    <div class="mb-3">
+                        <label asp-for="UserRole" class="form-label"></label>
+                        <select asp-for="UserRole" class="form-select">
+                            <option value="">-- Select Account Type --</option>
+                            <option value="reviewer">Reviewer</option>
+                            <option value="restaurantRep">Restaurant Representative</option>
+                        </select>
+                        <span asp-validation-for="UserRole" class="text-danger"></span>
+                    </div>
+
+
+                    <hr />
+                    <h4>Security Questions</h4>
+                    <p><small>These will be used to recover your account if you forget your password or username.</small></p>
+                    <div class="mb-3">
+                        <label asp-for="SecurityQuestion1" class="form-label"></label>
+                        <input asp-for="SecurityQuestion1" class="form-control" placeholder="e.g., What was your first pet's name?" />
+                        <span asp-validation-for="SecurityQuestion1" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SecurityAnswer1" class="form-label"></label>
+                        <input asp-for="SecurityAnswer1" class="form-control" placeholder="Answer 1" />
+                        <span asp-validation-for="SecurityAnswer1" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SecurityQuestion2" class="form-label"></label>
+                        <input asp-for="SecurityQuestion2" class="form-control" placeholder="e.g., What city were you born in?" />
+                        <span asp-validation-for="SecurityQuestion2" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SecurityAnswer2" class="form-label"></label>
+                        <input asp-for="SecurityAnswer2" class="form-control" placeholder="Answer 2" />
+                        <span asp-validation-for="SecurityAnswer2" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SecurityQuestion3" class="form-label"></label>
+                        <input asp-for="SecurityQuestion3" class="form-control" placeholder="e.g., What is your mother's maiden name?" />
+                        <span asp-validation-for="SecurityQuestion3" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SecurityAnswer3" class="form-label"></label>
+                        <input asp-for="SecurityAnswer3" class="form-control" placeholder="Answer 3" />
+                        <span asp-validation-for="SecurityAnswer3" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="w-100 btn btn-lg btn-primary mt-3 login-btn">Register</button>
+
+                    <p class="mt-3 text-center extra-links">
+                        Already have an account? <a asp-action="Login">Log in</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+</html>

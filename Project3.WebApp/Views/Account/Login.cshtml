@@ -1,0 +1,157 @@
+﻿@* Uses Yelp 2.0 Shared.Models.InputModels.LoginModel *@
+@model Project3.Shared.Models.ViewModels.LoginViewModel
+
+@{
+    // Set Layout to null to prevent the default _Layout.cshtml from being used
+    Layout = null;
+    // Set the page title specifically for the browser tab
+    ViewData["Title"] = "Login - Yelp 2.0";
+    
+    // Initialize the security question model for the partial view
+    var securityQuestionModel = new Project3.Shared.Models.InputModels.SecurityQuestionResetModel();
+    
+    // Check if there's a security question model in ViewData (returned from controller)
+    if (ViewData["SecurityQuestionModel"] != null)
+    {
+        securityQuestionModel = (Project3.Shared.Models.InputModels.SecurityQuestionResetModel)ViewData["SecurityQuestionModel"];
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    @* Link to Bootstrap CSS *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* --- Link to Shared Account Styles --- *@
+    <link rel="stylesheet" href="~/css/account-styles.css" asp-append-version="true" />
+    <style>
+        /* Additional styles for form switching */
+        #login-form, #security-question-reset-form {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+
+        @* Left Column - Graphic Area *@
+        <div class="login-graphic-col">
+            @* --- Added Title ON the Background --- *@
+            <h1 class="graphic-title">Yelp 2.0</h1>
+        </div>
+
+        @* Right Column - Form Area *@
+        <div class="login-form-col">
+            <div class="login-form-panel">
+
+                @* Display success message from TempData (e.g., after email confirmation) *@
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success mb-3" role="alert">
+                        @TempData["Message"]
+                    </div>
+                }
+                @if (ViewBag.SuccessMessage != null) @* Also check ViewBag just in case *@
+                {
+                    <div class="alert alert-success mb-3" role="alert">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
+
+                <!-- Login Form Section -->
+                <section id="login-form">
+                    <h1 class="login-title">Welcome Back!</h1>
+                    <p class="login-subtitle">Log in to continue.</p>
+
+                    @* FIX: Added asp-controller and asp-action to the form tag *@
+                    <form id="account" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                        @Html.AntiForgeryToken() @* Add AntiForgeryToken *@
+                        @* Display model-level errors *@
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                        @* Username Input - Label above *@
+                        <div class="mb-3">
+                            <label asp-for="Username" class="form-label"></label>
+                            <input asp-for="Username" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter your username" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+
+                        @* Password Input - Label above *@
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Enter your password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        @* Remember Me Checkbox *@
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" asp-for="RememberMe" />
+                            <label asp-for="RememberMe" class="form-check-label">
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+
+                        @* Submit Button *@
+                        <div>
+                            <button id="login-submit" type="submit" class="w-100 btn btn-primary login-btn">Log in</button>
+                        </div>
+
+                        @* Links to other actions *@
+                        <div class="extra-links mt-3">
+                            <p>
+                                @* FIX: Added asp-controller for clarity/robustness *@
+                                <a asp-controller="Account" asp-action="ForgotPassword">Forgot your password?</a>
+                            </p>
+                            <p>
+                                @* FIX: Added asp-controller for clarity/robustness *@
+                                <a asp-controller="Account" asp-action="ForgotUsername">Forgot your username?</a>
+                            </p>
+                            <p>
+                                @* FIX: Added asp-controller for clarity/robustness *@
+                                <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]">Register as a new user</a>
+                            </p>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Security Question Reset Section -->
+                @await Html.PartialAsync("_SecurityQuestionResetPartial", securityQuestionModel)
+            </div>
+        </div>
+    </div>
+
+    @* Link to jQuery and Bootstrap JS (ensure paths are correct) *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Show security question form and hide login form
+        function showSecurityQuestionForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('security-question-reset-form').style.display = 'block';
+        }
+        
+        // Show login form and hide security question form
+        function showLoginForm() {
+            document.getElementById('security-question-reset-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+        
+        // Check if we need to show security question form on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (ViewData["ShowSecurityQuestionForm"] != null && (bool)ViewData["ShowSecurityQuestionForm"])
+            {
+                <text>showSecurityQuestionForm();</text>
+            }
+        });
+    </script>
+
+    @* Include Validation Scripts Partial View for client-side validation *@
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+</html>

@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Restaurant Analytics Dashboard";
+    var restaurantId = ViewData["RestaurantId"] as string;
+}
+
+<div class="container">
+    <h1 class="mb-4">Restaurant Analytics Dashboard</h1>
+    <p class="text-muted">Viewing analytics for your restaurant (ID: @restaurantId)</p>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Reservations by Day of Week</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="@Url.Action("ReservationsByDay")" class="img-fluid" alt="Reservations by Day Chart" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Reservation Trend (Last 12 Months)</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="@Url.Action("ReservationTrend")" class="img-fluid" alt="Reservation Trend Chart" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa;
+    }
+    
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+</style> 

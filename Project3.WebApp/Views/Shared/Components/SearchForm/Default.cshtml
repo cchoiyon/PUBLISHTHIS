@@ -1,0 +1,58 @@
+@model Project3.Shared.Models.ViewModels.SearchCriteriaViewModel
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">
+            <i class="bi bi-search text-primary me-2"></i>
+            Find Restaurants
+        </h5>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Restaurant" asp-action="Search" method="post" class="row g-3">
+            @Html.AntiForgeryToken()
+            <div class="col-md-6">
+                <label asp-for="City" class="form-label">City</label>
+                <input asp-for="City" class="form-control" placeholder="Enter city name">
+            </div>
+            <div class="col-md-6">
+                <label asp-for="State" class="form-label">State</label>
+                <input asp-for="State" class="form-control" placeholder="Two-letter state code (e.g., NY)">
+            </div>
+            
+            <div class="col-12">
+                <label class="form-label">Cuisine Type</label>
+                <div class="cuisine-options">
+                    @if (Model.AvailableCuisines != null && Model.AvailableCuisines.Count > 0)
+                    {
+                        <div class="row">
+                            @foreach (var cuisine in Model.AvailableCuisines)
+                            {
+                                <div class="col-md-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="SelectedCuisines" 
+                                               value="@cuisine" id="cuisine_@cuisine.Replace(" ", "_")"
+                                               @(Model.SelectedCuisines.Contains(cuisine) ? "checked" : "")>
+                                        <label class="form-check-label" for="cuisine_@cuisine.Replace(" ", "_")">
+                                            @cuisine
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <input asp-for="CuisineInput" class="form-control" placeholder="Enter cuisine type (e.g., Italian, Mexican)">
+                    }
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-1"></i> Search
+                </button>
+                <a asp-controller="Restaurant" asp-action="Search" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+</div> 

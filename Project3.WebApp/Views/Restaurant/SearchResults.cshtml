@@ -1,0 +1,224 @@
+@model SearchCriteriaViewModel
+@{
+    ViewData["Title"] = "Search Results";
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+    var searchResults = ViewBag.SearchResults as List<RestaurantViewModel> ?? new List<RestaurantViewModel>();
+}
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3">Restaurant Search</h1>
+            <p class="text-muted">Find your next favorite dining spot</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Search Filters</h5>
+                    @await Component.InvokeAsync("SearchForm", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0">Search Results</h5>
+                        <span class="text-muted">Found @searchResults.Count restaurant(s)</span>
+                    </div>
+
+                    @if (searchResults.Any())
+                    {
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            @foreach (var restaurant in searchResults)
+                            {
+                                <div class="col">
+                                    <partial name="_RestaurantCardPartial" model="restaurant" />
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            @if (TempData["SearchResults"] != null)
+                            {
+                                <span>No restaurants found matching your criteria. Try adjusting your search filters.</span>
+                            }
+                            else
+                            {
+                                <span>Enter search criteria above to find restaurants.</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Restaurant Locations</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="searchResultsMap" style="height: 600px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- Add Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .restaurant-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .restaurant-card.border-primary {
+            border-width: 2px !important;
+        }
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-selection--multiple {
+            min-height: 38px !important;
+            border: 1px solid #ced4da !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        let map;
+        let markers = [];
+        let infoWindows = [];
+
+        // Helper function to get the URL for restaurant details
+        function getDetailsUrl(restaurantId) {
+            return `/Restaurant/Details/${restaurantId}`;
+        }
+
+        function initSearchResultsMap() {
+            map = new google.maps.Map(document.getElementById('searchResultsMap'), {
+                zoom: 12,
+                center: { lat: 40.7128, lng: -74.0060 } // Default to NYC, will be updated
+            });
+
+            const restaurants = @Html.Raw(Json.Serialize(searchResults));
+            const bounds = new google.maps.LatLngBounds();
+
+            // Geocode each restaurant's address and add a marker
+            restaurants.forEach(restaurant => {
+                const geocoder = new google.maps.Geocoder();
+                const address = `${restaurant.address}, ${restaurant.city}, ${restaurant.state} ${restaurant.zipCode}`;
+
+                geocoder.geocode({ address: address }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        const location = results[0].geometry.location;
+                        const marker = new google.maps.Marker({
+                            map: map,
+                            position: location,
+                            title: restaurant.name,
+                            restaurantId: restaurant.restaurantID
+                        });
+
+                        // Add info window
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: `
+                                <div>
+                                    <h6>${restaurant.name}</h6>
+                                    <p>${restaurant.address}<br>
+                                    ${restaurant.city}, ${restaurant.state} ${restaurant.zipCode}</p>
+                                    <a href="${getDetailsUrl(restaurant.restaurantID)}" class="btn btn-sm btn-primary">View Details</a>
+                                </div>
+                            `
+                        });
+
+                        marker.addListener('click', () => {
+                            // Close all other info windows
+                            infoWindows.forEach(iw => iw.close());
+                            infoWindow.open(map, marker);
+                            // Highlight the corresponding card
+                            highlightCard(restaurant.restaurantID);
+                        });
+
+                        markers.push(marker);
+                        infoWindows.push(infoWindow);
+                        bounds.extend(location);
+                    }
+                });
+            });
+
+            // Fit map to show all markers
+            if (markers.length > 0) {
+                map.fitBounds(bounds);
+            }
+        }
+
+        function highlightCard(restaurantId) {
+            // Remove highlight from all cards
+            document.querySelectorAll('.restaurant-card').forEach(card => {
+                card.classList.remove('border-primary', 'shadow');
+            });
+            
+            // Add highlight to selected card
+            const selectedCard = document.querySelector(`.restaurant-card[data-restaurant-id="${restaurantId}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('border-primary', 'shadow');
+                selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Add click handlers to restaurant cards
+        document.addEventListener('DOMContentLoaded', () => {
+            initSearchResultsMap();
+
+            // Add click handlers to restaurant cards
+            document.querySelectorAll('.restaurant-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // Don't trigger if clicking on the "View Details" button
+                    if (!e.target.closest('a')) {
+                        const restaurantId = parseInt(card.dataset.restaurantId);
+                        const marker = markers.find(m => m.restaurantId === restaurantId);
+                        if (marker) {
+                            // Close all info windows
+                            infoWindows.forEach(iw => iw.close());
+                            // Open info window for this marker
+                            const infoWindow = infoWindows[markers.indexOf(marker)];
+                            infoWindow.open(map, marker);
+                            // Center map on marker
+                            map.panTo(marker.getPosition());
+                            // Highlight the card
+                            highlightCard(restaurantId);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Add Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for cuisine dropdown
+            $('select[name="SelectedCuisines"]').select2({
+                placeholder: "Select cuisines (leave empty for all)",
+                allowClear: true
+            });
+        });
+    </script>
+} 

@@ -1,0 +1,250 @@
+﻿@model Project3.Shared.Models.ViewModels.ReviewViewModel
+@{
+    ViewData["Title"] = "Create Review";
+    Layout = "_AppLayout";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.DebugInfo))
+{
+    <div class="alert alert-info">
+        @ViewBag.DebugInfo
+    </div>
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Review @Model.RestaurantName</h2>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        
+                        <input type="hidden" asp-for="RestaurantID" />
+                        <input type="hidden" asp-for="RestaurantName" />
+                        <input type="hidden" asp-for="ReviewerUsername" value="@User.Identity.Name" />
+                        
+                        <div class="mb-4">
+                            <label asp-for="VisitDate" class="form-label">When did you visit?</label>
+                            <input asp-for="VisitDate" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="VisitDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4 rating-card">
+                            <p class="rating-question">How would you rate the food quality?</p>
+                            <div class="star-rating-container">
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <input type="radio" id="food-star-@i" name="FoodQualityRating" value="@i" @(Model.FoodQualityRating == i ? "checked" : "") />
+                                        <label for="food-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                    }
+                                </div>
+                                <div class="rating-labels">
+                                    <span>Bad</span>
+                                    <span>Excellent</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="FoodQualityRating" id="FoodQualityRating" value="3" />
+                        
+                        <div class="mb-4 rating-card">
+                            <p class="rating-question">How was the service?</p>
+                            <div class="star-rating-container">
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <input type="radio" id="service-star-@i" name="ServiceRating" value="@i" @(Model.ServiceRating == i ? "checked" : "") />
+                                        <label for="service-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                    }
+                                </div>
+                                <div class="rating-labels">
+                                    <span>Bad</span>
+                                    <span>Excellent</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="ServiceRating" id="ServiceRating" value="3" />
+                        
+                        <div class="mb-4 rating-card">
+                            <p class="rating-question">How was the atmosphere?</p>
+                            <div class="star-rating-container">
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <input type="radio" id="atmosphere-star-@i" name="AtmosphereRating" value="@i" @(Model.AtmosphereRating == i ? "checked" : "") />
+                                        <label for="atmosphere-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                    }
+                                </div>
+                                <div class="rating-labels">
+                                    <span>Bad</span>
+                                    <span>Excellent</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="AtmosphereRating" id="AtmosphereRating" value="3" />
+                        
+                        <div class="mb-4 rating-card">
+                            <p class="rating-question">How would you rate the price/value?</p>
+                            <div class="star-rating-container">
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <input type="radio" id="price-star-@i" name="PriceRating" value="@i" @(Model.PriceRating == i ? "checked" : "") />
+                                        <label for="price-star-@i" title="@i stars"><i class="fas fa-star"></i></label>
+                                    }
+                                </div>
+                                <div class="rating-labels">
+                                    <span>Bad</span>
+                                    <span>Excellent</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="PriceRating" id="PriceRating" value="3" />
+
+                        <div class="mb-4">
+                            <label asp-for="Comments" class="form-label">Your Review</label>
+                            <textarea asp-for="Comments" class="form-control" rows="6" placeholder="Tell us about your experience..."></textarea>
+                            <span asp-validation-for="Comments" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@Model.RestaurantID" class="btn btn-secondary me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/review/star-rating.css" />
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all radio buttons for ratings
+            const foodRadios = document.querySelectorAll('input[name="FoodQualityRating"][type="radio"]');
+            const serviceRadios = document.querySelectorAll('input[name="ServiceRating"][type="radio"]');
+            const atmosphereRadios = document.querySelectorAll('input[name="AtmosphereRating"][type="radio"]');
+            const priceRadios = document.querySelectorAll('input[name="PriceRating"][type="radio"]');
+            
+            // Get all hidden fields
+            const foodHidden = document.getElementById('FoodQualityRating');
+            const serviceHidden = document.getElementById('ServiceRating');
+            const atmosphereHidden = document.getElementById('AtmosphereRating');
+            const priceHidden = document.getElementById('PriceRating');
+            
+            // Function to update star colors for a specific rating group
+            function updateStarColors(groupName, selectedValue) {
+                // Get all stars in this group
+                const stars = document.querySelectorAll(`label[for^="${groupName}-star-"] .fas`);
+                
+                // Reset all stars to gray
+                stars.forEach(star => {
+                    star.style.color = '#ccc';
+                });
+                
+                // Color stars up to the selected value yellow
+                for (let i = 0; i < selectedValue; i++) {
+                    if (stars[i]) {
+                        stars[i].style.color = '#ffc107';
+                    }
+                }
+            }
+            
+            // Set default ratings
+            setDefaultRating(foodRadios, 3);
+            setDefaultRating(serviceRadios, 3);
+            setDefaultRating(atmosphereRadios, 3);
+            setDefaultRating(priceRadios, 3);
+            
+            // Initialize all star colors based on initial values
+            updateStarColors('food', 3);
+            updateStarColors('service', 3);
+            updateStarColors('atmosphere', 3);
+            updateStarColors('price', 3);
+            
+            // Add event listeners to all radio buttons
+            addRadioListeners(foodRadios, foodHidden, 'food');
+            addRadioListeners(serviceRadios, serviceHidden, 'service');
+            addRadioListeners(atmosphereRadios, atmosphereHidden, 'atmosphere');
+            addRadioListeners(priceRadios, priceHidden, 'price');
+            
+            // Add form submission event
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Update hidden inputs one last time before submission
+                    updateHiddenField(foodRadios, foodHidden);
+                    updateHiddenField(serviceRadios, serviceHidden);
+                    updateHiddenField(atmosphereRadios, atmosphereHidden);
+                    updateHiddenField(priceRadios, priceHidden);
+                    
+                    console.log(`Submitting review with ratings: Food=${foodHidden.value}, Service=${serviceHidden.value}, Atmosphere=${atmosphereHidden.value}, Price=${priceHidden.value}`);
+                });
+            }
+            
+            // Helper function to set default rating
+            function setDefaultRating(radios, value) {
+                for (let i = 0; i < radios.length; i++) {
+                    if (parseInt(radios[i].value) === value) {
+                        radios[i].checked = true;
+                        break;
+                    }
+                }
+            }
+            
+            // Helper function to add listeners to radio buttons
+            function addRadioListeners(radios, hiddenField, groupName) {
+                for (let i = 0; i < radios.length; i++) {
+                    radios[i].addEventListener('change', function() {
+                        const value = parseInt(this.value);
+                        hiddenField.value = value;
+                        console.log(`Updated ${hiddenField.id} to ${value}`);
+                        
+                        // Update star colors
+                        updateStarColors(groupName, value);
+                        
+                        // Highlight the card containing this radio
+                        const card = this.closest('.rating-card');
+                        if (card) {
+                            // Remove highlight from all cards
+                            document.querySelectorAll('.rating-card').forEach(c => {
+                                c.classList.remove('active-card');
+                            });
+                            // Add highlight to this card
+                            card.classList.add('active-card');
+                        }
+                    });
+                }
+            }
+            
+            // Helper function to update hidden field from radio value
+            function updateHiddenField(radios, hiddenField) {
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        hiddenField.value = radios[i].value;
+                        return;
+                    }
+                }
+                // If no radio is checked, default to 3
+                hiddenField.value = "3";
+            }
+        });
+    </script>
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,187 @@
+@model ReservationViewModel
+@using System.Web
+
+<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">Make a Reservation at @Model.RestaurantName</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Alert for demo mode -->
+                @if (ViewBag.DemoMode != null)
+                {
+                    <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                        <i class="bi bi-info-circle me-2"></i> @ViewBag.DemoMode
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                
+                <!-- Alert for API warning -->
+                @if (ViewBag.ApiWarning != null)
+                {
+                    <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                        <i class="bi bi-wifi-off me-2"></i> @ViewBag.ApiWarning
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                
+                <!-- Alert for success message -->
+                <div id="reservationSuccess" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+                    <strong>Success!</strong> Your reservation has been submitted successfully. The restaurant will contact you if confirmation is needed.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Alert for error message -->
+                <div id="reservationError" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                    <strong>Error!</strong> <span id="errorMessage">There was a problem submitting your reservation.</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <!-- Alert for demo mode response -->
+                <div id="demoModeAlert" class="alert alert-info alert-dismissible fade show d-none" role="alert">
+                    <i class="bi bi-info-circle me-2"></i> <span id="demoMessage">This is a demo mode response.</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <!-- Alert for offline mode -->
+                <div id="offlineModeAlert" class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+                    <i class="bi bi-wifi-off me-2"></i> <span id="offlineMessage">Your reservation has been recorded in offline mode.</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div id="reservationFormContainer">
+                    <form id="reservationForm" method="post">
+                        @Html.AntiForgeryToken()
+                        <div id="validationSummary" class="text-danger mb-3"></div>
+
+                        @* Hidden field for RestaurantID *@
+                        <input type="hidden" id="RestaurantID" name="RestaurantID" value="@Model.RestaurantID" />
+                        
+                        @* Add hidden field for RestaurantName - properly escaped *@
+                        <input type="hidden" id="RestaurantName" name="RestaurantName" value="@Html.Raw(HttpUtility.HtmlAttributeEncode(Model.RestaurantName))" />
+
+                        <div class="mb-3">
+                            <label for="ContactName" class="form-label">Your Name</label>
+                            <input id="ContactName" name="ContactName" class="form-control" placeholder="Your Name" value="@Model.ContactName" />
+                            <span data-valmsg-for="ContactName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Phone" class="form-label">Phone Number</label>
+                            <input id="Phone" name="Phone" class="form-control" placeholder="Your Phone Number" value="@Model.Phone" />
+                            <span data-valmsg-for="Phone" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">Email Address</label>
+                            <input id="Email" name="Email" type="email" class="form-control" placeholder="Your Email Address" value="@Model.Email" />
+                            <span data-valmsg-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="ReservationDateTime" class="form-label">Date & Time</label>
+                                <input id="ReservationDateTime" name="ReservationDateTime" type="datetime-local" class="form-control" value="@Model.ReservationDateTime.ToString("yyyy-MM-ddTHH:mm")" />
+                                <span data-valmsg-for="ReservationDateTime" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="PartySize" class="form-label">Party Size</label>
+                                <input id="PartySize" name="PartySize" type="number" min="1" class="form-control" placeholder="Number of Guests" value="@Model.PartySize" />
+                                <span data-valmsg-for="PartySize" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="SpecialRequests" class="form-label">Special Requests</label>
+                            <textarea id="SpecialRequests" name="SpecialRequests" class="form-control" rows="3" placeholder="Any special requests? (Optional)">@Model.SpecialRequests</textarea>
+                            <span data-valmsg-for="SpecialRequests" class="text-danger"></span>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Success view (hidden by default) -->
+                <div id="successView" class="d-none text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    <h2 class="mb-3">Reservation Confirmed!</h2>
+                    <p class="lead mb-4">Your reservation request has been submitted successfully.</p>
+                    <p>The restaurant will contact you if any additional information is needed.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="formFooterButtons">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="submitReservation" type="button" class="btn btn-primary">Submit Reservation</button>
+                    <!-- Loading spinner - hidden by default -->
+                    <div id="submitSpinner" class="spinner-border text-primary d-none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div id="successFooterButtons" class="d-none">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="resetReservationButton" type="button" class="btn btn-primary">Make Another Reservation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Add event listeners to clear validation errors on input
+document.addEventListener('DOMContentLoaded', function() {
+    const setupInputValidation = () => {
+        const form = document.getElementById('reservationForm');
+        if (!form) return;
+        
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                // Clear field-specific error
+                const errorSpan = document.querySelector(`[data-valmsg-for="${this.name}"]`);
+                if (errorSpan) {
+                    errorSpan.textContent = '';
+                }
+                
+                // Remove invalid class
+                this.classList.remove('is-invalid');
+                
+                // Clear validation summary
+                const validationSummary = document.getElementById('validationSummary');
+                if (validationSummary) {
+                    validationSummary.innerHTML = '';
+                }
+            });
+        });
+    };
+    
+    // Initial setup
+    setupInputValidation();
+    
+    // Setup again when modal opens (in case it gets recreated)
+    const modal = document.getElementById('reservationModal');
+    if (modal) {
+        if (typeof bootstrap !== 'undefined') {
+            // If Bootstrap JS is loaded, use its events
+            modal.addEventListener('shown.bs.modal', setupInputValidation);
+        } else {
+            // Fallback if Bootstrap JS isn't available yet
+            console.log('Bootstrap not loaded, using alternative modal initialization');
+            setupInputValidation();
+        }
+    }
+});
+
+// Make sure the submit button has a click handler
+const submitBtn = document.getElementById('submitReservation');
+if (submitBtn) {
+    console.log('Added click handler to submit reservation button');
+    submitBtn.addEventListener('click', function() {
+        console.log('Submit reservation button clicked');
+        // The setupModalEventHandlers function will handle the rest
+    });
+}
+</script> 

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Project3.Shared.Models.ViewModels.ReviewViewModel>
+@{
+    ViewData["Title"] = "My Reviews";
+    Layout = "_AppLayout"; // Use your main application layout
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+@* Display Success/Error messages from TempData *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Restaurant</th>
+                <th>Visit Date</th>
+                <th>Overall Rating</th> @* Example - calculate or show breakdown *@
+                <th>Comments</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model)
+            {
+                <tr>
+                    <td>
+                        @* Link to the restaurant if needed *@
+                        <a asp-controller="Restaurant" asp-action="Details" asp-route-id="@review.RestaurantID">
+                            @review.RestaurantName
+                        </a>
+                    </td>
+                    <td>@review.VisitDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @* TODO: Display overall rating for the review (e.g., avg of 3 ratings) *@
+                        @{
+                            var avgRating = (review.FoodQualityRating + review.ServiceRating + review.AtmosphereRating) / 3.0;
+                        }
+                        @avgRating.ToString("F1") / 5
+                    </td>
+                    <td>
+                        @* Truncate long comments if necessary *@
+                        @(review.Comments?.Length > 100 ? review.Comments.Substring(0, 100) + "..." : review.Comments)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@review.ReviewID" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                        @* Use a form for DELETE operation *@
+                        <form asp-action="Delete" asp-route-id="@review.ReviewID" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this review?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                        @* Or link to a DeleteConfirm page:
+                <a asp-action="DeleteConfirm" asp-route-id="@review.ReviewID" class="btn btn-sm btn-outline-danger">Delete</a>
+                *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">You haven't written any reviews yet.</div>
+    <a asp-controller="ReviewerHome" asp-action="Index" class="btn btn-primary">Find Restaurants to Review</a>
+}
+
+<div class="mt-4">
+    <a asp-controller="ReviewerHome" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</div>

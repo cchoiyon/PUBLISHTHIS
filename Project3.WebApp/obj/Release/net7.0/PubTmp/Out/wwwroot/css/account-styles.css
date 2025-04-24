@@ -1,0 +1,202 @@
+﻿/* Styles for Account pages (Login, Register, Forgot Password, etc.) */
+/* Place this code in wwwroot/css/account-styles.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Example font */
+}
+
+/* Flex container for the two columns */
+.login-container {
+    display: flex;
+    min-height: 100vh; /* Use min-height to cover viewport */
+    width: 100%;
+}
+
+/* Left column styling (background image/graphic) */
+.login-graphic-col {
+    flex-basis: 50%;
+    /* Make sure 'background.jpg' is placed in 'wwwroot/images/' folder */
+    background-image: url('/images/background.jpg');
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-position: center center; /* Center the image */
+    background-size: cover; /* Scale the image to cover the column */
+    display: flex; /* Use flex to center content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center; /* Center text within */
+    position: relative; /* Needed if adding an overlay later */
+}
+
+/* Style for the text placed ON the background image */
+.graphic-title {
+    font-size: 3.5rem; /* Large text */
+    font-weight: bold;
+    color: white; /* White text */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Add shadow for readability */
+    z-index: 1; /* Ensure text is above potential overlay */
+}
+
+/* Optional Overlay: Uncomment if text is hard to read */
+/* .login-graphic-col::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* Adjust darkness */
+/* z-index: 0; */
+/* } */
+
+
+/* Right column styling (form) */
+.login-form-col {
+    flex-basis: 50%; /* Adjust width ratio as needed */
+    background-color: #ffffff; /* White background for the form area */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem; /* Add padding around the form */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+/* Style the form panel itself */
+.login-form-panel {
+    width: 100%;
+    max-width: 450px; /* Max width for the form */
+    padding: 2rem;
+    border-radius: 0.5rem;
+}
+
+.login-title {
+    font-size: 2.5rem; /* Large title */
+    font-weight: 600;
+    margin-bottom: 0.5rem; /* Reduced margin for subtitle */
+    text-align: center; /* Center the title */
+    color: #333; /* Darker color for title */
+}
+
+/* Subtitle Style */
+.login-subtitle {
+    font-size: 0.95rem;
+    color: #6c757d; /* Bootstrap's secondary text color */
+    text-align: center;
+    margin-bottom: 2rem; /* Space below subtitle */
+    line-height: 1.4;
+}
+
+/* Style for the displayed security question */
+.security-question-text {
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+/* Adjust form element spacing */
+.form-label {
+    margin-bottom: 0.25rem; /* Space between label and input */
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    margin-bottom: 1rem; /* Space below each input */
+    border-radius: 0.25rem; /* Slightly rounded inputs */
+    border: 1px solid #ced4da;
+}
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+
+.login-btn {
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-top: 1.5rem; /* Space above button */
+    margin-bottom: 1.5rem; /* Space below button */
+    border-radius: 0.25rem;
+}
+
+.form-check-label {
+    color: #555;
+}
+
+.extra-links p {
+    margin-bottom: 0.5rem; /* Space between links */
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.extra-links a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+    .extra-links a:hover {
+        text-decoration: underline;
+    }
+
+/* Styles specific to Register form's security questions section */
+.security-questions h4 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #444;
+    text-align: center;
+}
+
+.security-questions hr {
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive adjustments */
+@@media (max-width: 992px) { /* Adjust breakpoint if needed */
+    .login-form-panel {
+        max-width: 500px; /* Allow slightly wider form on medium screens */
+    }
+
+    .login-form-col {
+        padding: 2rem;
+    }
+}
+
+@@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column; /* Stack columns on smaller screens */
+    }
+
+    .login-graphic-col {
+        min-height: 200px; /* Shorter height on mobile */
+        flex-basis: auto; /* Reset basis */
+    }
+
+    .graphic-title {
+        font-size: 2.5rem;
+    }
+
+    .login-form-col {
+        flex-basis: auto; /* Reset basis */
+        padding: 1.5rem;
+    }
+
+    .login-form-panel {
+        box-shadow: none; /* Remove shadow on mobile if desired */
+        padding: 1.5rem;
+        max-width: none; /* Allow form panel to take full width */
+    }
+
+    .login-title {
+        font-size: 2rem;
+    }
+
+    .login-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+}

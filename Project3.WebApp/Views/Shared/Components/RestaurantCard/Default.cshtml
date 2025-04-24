@@ -1,0 +1,81 @@
+@model Project3.Shared.Models.ViewModels.RestaurantViewModel
+
+<div class="restaurant-card card shadow-sm h-100">
+    <div class="position-relative">
+        @if (!string.IsNullOrEmpty(Model.ProfilePhoto))
+        {
+            <img src="@Model.ProfilePhoto" class="card-img-top" alt="@Model.Name" style="height: 180px; object-fit: cover;">
+        }
+        else
+        {
+            <img src="~/images/restaurant-placeholder.jpg" class="card-img-top" alt="Restaurant placeholder" style="height: 180px; object-fit: cover;">
+        }
+        
+        @if (!string.IsNullOrEmpty(Model.LogoPhoto))
+        {
+            <div class="restaurant-logo position-absolute" style="bottom: -25px; right: 20px;">
+                <img src="@Model.LogoPhoto" alt="@Model.Name logo" class="img-thumbnail rounded-circle" style="width: 60px; height: 60px; object-fit: cover; background-color: white;">
+            </div>
+        }
+    </div>
+    
+    <div class="card-body pt-4">
+        <h5 class="card-title mb-1">@Model.Name</h5>
+        <p class="card-text text-muted small mb-2">
+            @Model.Cuisine • @Model.City, @Model.State
+        </p>
+        
+        <div class="rating-box mb-2">
+            <div class="d-flex align-items-center">
+                <div class="rating me-2">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Math.Round(Model.OverallRating))
+                        {
+                            <i class="bi bi-star-fill text-warning"></i>
+                        }
+                        else if (i - 0.5 <= Model.OverallRating)
+                        {
+                            <i class="bi bi-star-half text-warning"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-star text-warning"></i>
+                        }
+                    }
+                </div>
+                <span class="text-muted small">(@Model.ReviewCount reviews)</span>
+            </div>
+        </div>
+        
+        <p class="card-text description-text">
+            @(string.IsNullOrEmpty(Model.Description) 
+                ? (string.IsNullOrEmpty(Model.MarketingDescription) 
+                    ? "No description available." 
+                    : (Model.MarketingDescription.Length > 100 
+                        ? Model.MarketingDescription.Substring(0, 100) + "..." 
+                        : Model.MarketingDescription))
+                : (Model.Description.Length > 100 
+                    ? Model.Description.Substring(0, 100) + "..." 
+                    : Model.Description))
+        </p>
+        
+        <div class="price-level mb-3">
+            <span class="text-muted small">Price: </span>
+            @{
+                string priceDisplay = "";
+                for (int i = 0; i < Model.AveragePriceLevel; i++)
+                {
+                    priceDisplay += "$";
+                }
+            }
+            <span class="fw-bold text-success">@priceDisplay</span>
+        </div>
+    </div>
+    
+    <div class="card-footer bg-white border-top-0 pt-0">
+        <div class="d-grid gap-2">
+            <a href="@Url.Action("Details", "Restaurant", new { id = Model.RestaurantID })" class="btn btn-outline-primary btn-sm">View Details</a>
+        </div>
+    </div>
+</div> 

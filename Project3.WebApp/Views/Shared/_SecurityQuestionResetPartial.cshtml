@@ -1,0 +1,75 @@
+@model Project3.Shared.Models.InputModels.SecurityQuestionResetModel
+
+<div id="security-question-reset-form" style="display: none;">
+    <h1 class="login-title">Reset Password</h1>
+    <p class="login-subtitle">Using Security Questions</p>
+
+    <form id="security-question-form" asp-controller="Account" asp-action="SecurityQuestionReset" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+        
+        @if (Model == null || (string.IsNullOrEmpty(Model.SecurityQuestion1) && string.IsNullOrEmpty(Model.SecurityQuestion2) && string.IsNullOrEmpty(Model.SecurityQuestion3)))
+        {
+            <!-- Initial form: Request username -->
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label">Username</label>
+                <input asp-for="Username" class="form-control" placeholder="Enter your username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            
+            <div>
+                <button type="submit" class="w-100 btn btn-primary login-btn">Continue</button>
+            </div>
+        }
+        else
+        {
+            <!-- Security question form: Show the question and request answer -->
+            <input type="hidden" asp-for="Username" />
+            
+            <!-- Preserve all question values as hidden fields -->
+            @if (!string.IsNullOrEmpty(Model.SecurityQuestion1))
+            {
+                <input type="hidden" asp-for="SecurityQuestion1" />
+                <div class="mb-3">
+                    <label class="form-label">Security Question</label>
+                    <p class="form-control-static">@Model.SecurityQuestion1</p>
+                    
+                    <label class="form-label">Your Answer</label>
+                    <input asp-for="SecurityAnswer1" class="form-control" placeholder="Enter your answer" />
+                    <span asp-validation-for="SecurityAnswer1" class="text-danger"></span>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.SecurityQuestion2))
+            {
+                <input type="hidden" asp-for="SecurityQuestion2" />
+                <div class="mb-3">
+                    <label class="form-label">Security Question</label>
+                    <p class="form-control-static">@Model.SecurityQuestion2</p>
+                    
+                    <label class="form-label">Your Answer</label>
+                    <input asp-for="SecurityAnswer2" class="form-control" placeholder="Enter your answer" />
+                    <span asp-validation-for="SecurityAnswer2" class="text-danger"></span>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.SecurityQuestion3))
+            {
+                <input type="hidden" asp-for="SecurityQuestion3" />
+                <div class="mb-3">
+                    <label class="form-label">Security Question</label>
+                    <p class="form-control-static">@Model.SecurityQuestion3</p>
+                    
+                    <label class="form-label">Your Answer</label>
+                    <input asp-for="SecurityAnswer3" class="form-control" placeholder="Enter your answer" />
+                    <span asp-validation-for="SecurityAnswer3" class="text-danger"></span>
+                </div>
+            }
+            
+            <div>
+                <button type="submit" class="w-100 btn btn-primary login-btn">Submit</button>
+            </div>
+        }
+    </form>
+    
+    <div class="mt-3 text-center">
+        <a href="javascript:void(0);" onclick="showLoginForm()">Return to Login</a>
+    </div>
+</div> 
